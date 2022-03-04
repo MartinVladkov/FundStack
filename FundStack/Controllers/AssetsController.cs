@@ -21,7 +21,7 @@ namespace FundStack.Controllers
 
         [HttpPost]
         public IActionResult AddAsset(AddAssetFormModel input)
-            {
+        {
             if (!ModelState.IsValid)
             {
                 return View(input);
@@ -36,7 +36,7 @@ namespace FundStack.Controllers
                 Description = input.Description,
                 BuyDate = DateTime.UtcNow
             };
-
+            
             this.data.Assets.Add(asset);
             this.data.SaveChanges();
 

@@ -1,17 +1,26 @@
 ﻿using FundStack.Data;
+using System.ComponentModel.DataAnnotations;
+using static FundStack.Data.DataConstants;
 namespace FundStack.Models.Assets
 {
     public class AddAssetFormModel
     {
-        
+        [Required]
+        [StringLength(AssetNameMaxLength, MinimumLength = AssetNameMinLength, ErrorMessage = "The name of the asset must be between 2 and 15 characters")]
         public string Name { get; init; }
 
+        [Required]
         public int Type { get; init; }
 
+        [Required]
+        [Range(MinPrice, double.MaxValue, ErrorMessage = "The buy price cannot be 0")]
         public decimal BuyPrice { get; init; }
 
+        [Required]
+        [Range(1, double.MaxValue, ErrorMessage = "Invested money must be more than 1")]
         public decimal InvestedMoney { get; init; }
 
+        [MaxLength(350, ErrorMessage = "The maxximum length of the description is 350 characters")]
         public string? Description { get; init; }
     }
 }
