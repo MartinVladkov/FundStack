@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FundStack.Data.Migrations
 {
     [DbContext(typeof(FundStackDbContext))]
-    [Migration("20220303191407_AssetAndPortfolioTables")]
-    partial class AssetAndPortfolioTables
+    [Migration("20220304130152_Asset_Type_Portfolio_Tables")]
+    partial class Asset_Type_Portfolio_Tables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -68,10 +68,12 @@ namespace FundStack.Data.Migrations
                     b.Property<decimal?>("SellPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("Type")
+                    b.Property<int>("TypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TypeId");
 
                     b.ToTable("Assets");
                 });
@@ -105,6 +107,23 @@ namespace FundStack.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Portfolios");
+                });
+
+            modelBuilder.Entity("FundStack.Data.Models.Type", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Types");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -309,6 +328,17 @@ namespace FundStack.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("FundStack.Data.Models.Asset", b =>
+                {
+                    b.HasOne("FundStack.Data.Models.Type", "Type")
+                        .WithMany("Assets")
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Type");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -358,6 +388,11 @@ namespace FundStack.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("FundStack.Data.Models.Type", b =>
+                {
+                    b.Navigation("Assets");
                 });
 #pragma warning restore 612, 618
         }

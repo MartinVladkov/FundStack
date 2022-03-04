@@ -8,6 +8,8 @@ namespace FundStack.Data
     {
         public DbSet<Asset> Assets { get; set; }
 
+        public DbSet<Models.Type> Types { get; set; }
+
         public DbSet<Portfolio> Portfolios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -18,7 +20,14 @@ namespace FundStack.Data
             //    .WithMany(a => a.Assets)
             //    .HasForeignKey(a => a.PortfolioId)
             //    .OnDelete(DeleteBehavior.Restrict);
-            
+
+            builder
+                .Entity<Asset>()
+                .HasOne(a => a.Type)
+                .WithMany(a => a.Assets)
+                .HasForeignKey(a => a.TypeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(builder);
         }
 

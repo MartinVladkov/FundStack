@@ -13,7 +13,7 @@ namespace FundStack.Data.Models
         [StringLength(AssetNameMaxLength, MinimumLength = AssetNameMinLength)]
         public string Name { get; set; }
 
-        public AssetType Type { get; set; }
+        //public AssetType Type { get; set; }
 
         [Required]
         [Range(MinPrice, double.MaxValue)]
@@ -51,6 +51,10 @@ namespace FundStack.Data.Models
 
         [MaxLength(350)]
         public string? Description { get; set; }
+
+        public int TypeId { get; set; }
+
+        public Type Type { get; set; }
 
         //public int PortfolioId { get; set; }
 

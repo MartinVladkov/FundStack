@@ -14,9 +14,29 @@ namespace FundStack.Infrastructure
 
             data.Database.Migrate();
 
-
+            SeedTypes(data);
 
             return app;
+        }
+
+        private static void SeedTypes(FundStackDbContext data)
+        {
+            if (data.Types.Any())
+            {
+                return;
+            }
+
+            data.Types.AddRange(new[]
+            {
+                new Data.Models.Type { Name = "Crypto" },
+                new Data.Models.Type { Name = "Stock"},
+                new Data.Models.Type { Name = "ETF"},
+                new Data.Models.Type { Name = "Commodity"},
+                new Data.Models.Type { Name = "Currency"},
+                new Data.Models.Type { Name = "Index"},
+            });
+
+            data.SaveChanges();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace FundStack.Controllers
 {
     public class AssetsController : Controller 
     {
-        public FundStackDbContext data { get; set; }
+        private FundStackDbContext data { get; set; }
 
         public AssetsController(FundStackDbContext data)
         {
@@ -16,21 +16,31 @@ namespace FundStack.Controllers
 
         public IActionResult AddAsset()
         {
-            return View();
+            return View(new AddAssetFormModel
+            {
+                Types = this.GetAssetTypes()
+            });
         }
 
         [HttpPost]
         public IActionResult AddAsset(AddAssetFormModel input)
         {
+            if (!this.data.Types.Any(t => t.Id == input.TypeId))
+            {
+                this.ModelState.AddModelError(nameof(input.TypeId), "Type is not valid");
+            }
+
             if (!ModelState.IsValid)
             {
+                input.Types = this.GetAssetTypes();
+
                 return View(input);
             }
 
             var asset = new Asset
             {
                 Name = input.Name,
-                Type = (AssetType)input.Type,
+                TypeId = input.TypeId,
                 BuyPrice = input.BuyPrice,
                 InvestedMoney = input.InvestedMoney,
                 Description = input.Description,
@@ -42,6 +52,15 @@ namespace FundStack.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        private IEnumerable<AssetTypeViewModel> GetAssetTypes() 
+            => data
+                .Types
+                .Select(t => new AssetTypeViewModel
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                }).ToList();
 
         public IActionResult SellAsset()
         {
