@@ -50,7 +50,7 @@ namespace FundStack.Controllers
             this.data.Assets.Add(asset);
             this.data.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(All));
         }
 
         private IEnumerable<AssetTypeViewModel> GetAssetTypes() 
@@ -61,6 +61,24 @@ namespace FundStack.Controllers
                     Id = t.Id,
                     Name = t.Name,
                 }).ToList();
+
+        public IActionResult All()
+        {
+            var assets = this.data
+                .Assets
+                .OrderByDescending(a => a.Id)
+                .Select(a => new AllAssetsViewModel
+                {
+                    Id = a.Id,
+                    Name=a.Name,
+                    BuyPrice=a.BuyPrice,
+                    BuyDate = a.BuyDate,
+                    InvestedMoney=a.InvestedMoney,
+                    Description = a.Description
+                }).ToList();
+
+            return View(assets);
+        } 
 
         public IActionResult SellAsset()
         {

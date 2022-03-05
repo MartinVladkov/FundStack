@@ -1,0 +1,47 @@
+﻿@model IEnumerable<AllAssetsViewModel>
+<style>
+    table {
+  border-collapse: separate;
+  border-spacing: 0 10px;
+}
+td:first-child,
+th:first-child {
+  border-radius: 7px 0 0 7px;
+}
+td:last-child,
+th:last-child {
+  border-radius: 0 7px 7px 0;
+}
+tr
+{
+  line-height: 45px;
+}
+
+</style>
+<div calss="row">
+    <table class="table table-striped table-dark mt-5 mb-5">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Buy Price</th>
+                <th scope="col">Buy Date</th>
+                <th scope="col">Invested Money</th>
+                <th scope="col">Descripton</th>
+            </tr>
+        </thead>
+        @foreach (var asset in Model)
+        {
+            <tbody>
+                <tr>
+                    <th scope="row">@asset.Id</th>
+                    <td>@asset.Name</td>
+                    <td>@asset.BuyPrice</td>
+                    <td>@asset.BuyDate</td>
+                    <td>@asset.InvestedMoney</td>
+                    <td>@asset.Description</td>
+                </tr>
+            </tbody>
+        }
+    </table>
+</div>
