@@ -6,6 +6,8 @@
         
         public string Name { get; set; }
 
+        public string Type { get; set; }
+
         public decimal BuyPrice { get; set; }
 
         public DateTime BuyDate { get; set; }

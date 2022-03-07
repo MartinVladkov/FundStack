@@ -71,6 +71,7 @@ namespace FundStack.Controllers
                 {
                     Id = a.Id,
                     Name=a.Name,
+                    Type = a.Type.Name,
                     BuyPrice=a.BuyPrice,
                     BuyDate = a.BuyDate,
                     InvestedMoney=a.InvestedMoney,
