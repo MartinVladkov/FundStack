@@ -37,10 +37,6 @@ namespace FundStack.Data
                 .HasOne<Portfolio>(p => p.Portfolio)
                 .WithOne(s => s.User)
                 .OnDelete(DeleteBehavior.Restrict);
-            //.HasOne(p => p.Portfolio)
-            //.WithOne(p => p.User)
-            //.HasForeignKey<User>(u => u.PortfolioId)
-            //.OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);
         }

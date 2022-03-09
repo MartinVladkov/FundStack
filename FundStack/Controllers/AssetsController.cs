@@ -1,6 +1,7 @@
 ﻿using FundStack.Data;
 using FundStack.Data.Models;
 using FundStack.Models.Assets;
+using FundStack.Services.Assets;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -8,10 +9,12 @@ namespace FundStack.Controllers
 {
     public class AssetsController : Controller 
     {
-        private FundStackDbContext data { get; set; }
+        private readonly IAssetService assets;
+        private readonly FundStackDbContext data;
 
-        public AssetsController(FundStackDbContext data)
+        public AssetsController(IAssetService assets, FundStackDbContext data)
         {
+            this.assets = assets;  
             this.data = data;
         }
 
@@ -68,20 +71,7 @@ namespace FundStack.Controllers
 
         public IActionResult All()
         {
-            var assets = this.data
-                .Assets
-                .OrderByDescending(a => a.Id)
-                .Select(a => new AllAssetsViewModel
-                {
-                    Id = a.Id,
-                    Name=a.Name.ToUpper(),
-                    Type = a.Type.Name,
-                    BuyPrice=a.BuyPrice,
-                    BuyDate = a.BuyDate,
-                    InvestedMoney=a.InvestedMoney,
-                    Description = a.Description
-                }).ToList();
-
+            var assets = this.assets.All();
             return View(assets);
         } 
 

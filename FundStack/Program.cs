@@ -1,6 +1,7 @@
 using FundStack.Data;
 using FundStack.Data.Models;
 using FundStack.Infrastructure;
+using FundStack.Services.Assets;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,8 @@ builder.Services.AddControllersWithViews(options =>
     options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
 });
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+builder.Services.AddTransient<IAssetService, AssetService>();
 
 var app = builder.Build();
 
