@@ -53,10 +53,9 @@ namespace FundStack.Data.Models
         public string? Description { get; set; }
 
         public int TypeId { get; set; }
-
         public Type Type { get; set; }
 
-        public int PortfolioId { get; set; }
+        public string PortfolioId { get; set; }
         public Portfolio Portfolio { get; set; }
     }
 }

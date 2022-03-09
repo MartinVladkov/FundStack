@@ -4,6 +4,7 @@ using FundStack.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FundStack.Data.Migrations
 {
     [DbContext(typeof(FundStackDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220309120110_UserPortfolioRelations")]
+    partial class UserPortfolioRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,9 +56,8 @@ namespace FundStack.Data.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
-                    b.Property<string>("PortfolioId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("PortfolioId")
+                        .HasColumnType("int");
 
                     b.Property<decimal?>("ProfitLoss")
                         .HasColumnType("decimal(18,2)");
@@ -84,8 +85,11 @@ namespace FundStack.Data.Migrations
 
             modelBuilder.Entity("FundStack.Data.Models.Portfolio", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<decimal>("AvailableMoney")
                         .HasColumnType("decimal(18,2)");
@@ -105,7 +109,11 @@ namespace FundStack.Data.Migrations
                     b.Property<decimal>("TotalValue")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Portfolios");
                 });
@@ -169,6 +177,9 @@ namespace FundStack.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int>("PortfolioId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -188,6 +199,9 @@ namespace FundStack.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("PortfolioId")
+                        .IsUnique();
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -348,15 +362,15 @@ namespace FundStack.Data.Migrations
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("FundStack.Data.Models.Portfolio", b =>
+            modelBuilder.Entity("FundStack.Data.Models.User", b =>
                 {
-                    b.HasOne("FundStack.Data.Models.User", "User")
-                        .WithOne("Portfolio")
-                        .HasForeignKey("FundStack.Data.Models.Portfolio", "UserId")
+                    b.HasOne("FundStack.Data.Models.Portfolio", "Portfolio")
+                        .WithOne("User")
+                        .HasForeignKey("FundStack.Data.Models.User", "PortfolioId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Portfolio");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -413,17 +427,14 @@ namespace FundStack.Data.Migrations
             modelBuilder.Entity("FundStack.Data.Models.Portfolio", b =>
                 {
                     b.Navigation("Assets");
+
+                    b.Navigation("User")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FundStack.Data.Models.Type", b =>
                 {
                     b.Navigation("Assets");
-                });
-
-            modelBuilder.Entity("FundStack.Data.Models.User", b =>
-                {
-                    b.Navigation("Portfolio")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

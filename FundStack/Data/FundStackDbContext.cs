@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FundStack.Data
 {
-    public class FundStackDbContext : IdentityDbContext
+    public class FundStackDbContext : IdentityDbContext<User>
     {
         public DbSet<Asset> Assets { get; set; }
 
@@ -30,11 +30,17 @@ namespace FundStack.Data
                 .HasForeignKey(a => a.TypeId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Portfolio>()
+                .HasKey(u => u.UserId);
+
             builder.Entity<User>()
-                .HasOne(p => p.Portfolio)
-                .WithOne(p => p.User)
-                .HasForeignKey<User>(u => u.PortfolioId)
+                .HasOne<Portfolio>(p => p.Portfolio)
+                .WithOne(s => s.User)
                 .OnDelete(DeleteBehavior.Restrict);
+            //.HasOne(p => p.Portfolio)
+            //.WithOne(p => p.User)
+            //.HasForeignKey<User>(u => u.PortfolioId)
+            //.OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);
         }

@@ -6,7 +6,9 @@ namespace FundStack.Data.Models
 {
     public class Portfolio
     {
-        public int Id { get; set; }
+        [Key, ForeignKey("User")]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public string UserId { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalValue { get; set; }
@@ -26,7 +28,6 @@ namespace FundStack.Data.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal ProfitLossPercent { get; set; }
 
-        public string UserId { get; set; }
         public User User { get; set; }
 
         public IEnumerable<Asset> Assets { get; set; } = new List<Asset>();

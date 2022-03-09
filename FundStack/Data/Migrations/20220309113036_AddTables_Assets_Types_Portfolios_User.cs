@@ -132,6 +132,7 @@ namespace FundStack.Data.Migrations
             migrationBuilder.DropColumn(
                 name: "PortfolioId",
                 table: "AspNetUsers");
+
         }
     }
 }

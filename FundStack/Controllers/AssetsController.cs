@@ -2,6 +2,7 @@
 using FundStack.Data.Models;
 using FundStack.Models.Assets;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FundStack.Controllers
 {
@@ -37,6 +38,8 @@ namespace FundStack.Controllers
                 return View(input);
             }
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var asset = new Asset
             {
                 Name = input.Name,
@@ -44,9 +47,10 @@ namespace FundStack.Controllers
                 BuyPrice = input.BuyPrice,
                 InvestedMoney = input.InvestedMoney,
                 Description = input.Description,
-                BuyDate = DateTime.UtcNow
+                BuyDate = DateTime.UtcNow,
+                PortfolioId = userId
             };
-            
+
             this.data.Assets.Add(asset);
             this.data.SaveChanges();
 
