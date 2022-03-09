@@ -5,10 +5,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FundStack.Data.Migrations
 {
-    public partial class Asset_Type_Portfolio_Tables : Migration
+    public partial class AddTables_Assets_Types_Portfolios_User : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<int>(
+                name: "PortfolioId",
+                table: "AspNetUsers",
+                type: "int",
+                nullable: true);
+
             migrationBuilder.CreateTable(
                 name: "Portfolios",
                 columns: table => new
@@ -20,7 +26,8 @@ namespace FundStack.Data.Migrations
                     AvailableMoney = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     InvestedMoney = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ProfitLoss = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ProfitLossPercent = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    ProfitLossPercent = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,11 +64,18 @@ namespace FundStack.Data.Migrations
                     ProfitLoss = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     ProfitLossPercent = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
-                    TypeId = table.Column<int>(type: "int", nullable: false)
+                    TypeId = table.Column<int>(type: "int", nullable: false),
+                    PortfolioId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Assets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Assets_Portfolios_PortfolioId",
+                        column: x => x.PortfolioId,
+                        principalTable: "Portfolios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Assets_Types_TypeId",
                         column: x => x.TypeId,
@@ -71,13 +85,37 @@ namespace FundStack.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_PortfolioId",
+                table: "AspNetUsers",
+                column: "PortfolioId",
+                unique: true,
+                filter: "[PortfolioId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Assets_PortfolioId",
+                table: "Assets",
+                column: "PortfolioId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Assets_TypeId",
                 table: "Assets",
                 column: "TypeId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_Portfolios_PortfolioId",
+                table: "AspNetUsers",
+                column: "PortfolioId",
+                principalTable: "Portfolios",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_AspNetUsers_Portfolios_PortfolioId",
+                table: "AspNetUsers");
+
             migrationBuilder.DropTable(
                 name: "Assets");
 
@@ -86,6 +124,14 @@ namespace FundStack.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Types");
+
+            migrationBuilder.DropIndex(
+                name: "IX_AspNetUsers_PortfolioId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "PortfolioId",
+                table: "AspNetUsers");
         }
     }
 }

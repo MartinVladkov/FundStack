@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FundStack.Data.Migrations
 {
     [DbContext(typeof(FundStackDbContext))]
-    [Migration("20220304130152_Asset_Type_Portfolio_Tables")]
-    partial class Asset_Type_Portfolio_Tables
+    [Migration("20220309110708_AddTables_Assets_Types_Portfolios_User")]
+    partial class AddTables_Assets_Types_Portfolios_User
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -56,6 +56,9 @@ namespace FundStack.Data.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
+                    b.Property<int>("PortfolioId")
+                        .HasColumnType("int");
+
                     b.Property<decimal?>("ProfitLoss")
                         .HasColumnType("decimal(18,2)");
 
@@ -72,6 +75,8 @@ namespace FundStack.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PortfolioId");
 
                     b.HasIndex("TypeId");
 
@@ -103,6 +108,10 @@ namespace FundStack.Data.Migrations
 
                     b.Property<decimal>("TotalValue")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -190,6 +199,10 @@ namespace FundStack.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -241,6 +254,8 @@ namespace FundStack.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -328,13 +343,35 @@ namespace FundStack.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("FundStack.Data.Models.User", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<int>("PortfolioId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("PortfolioId")
+                        .IsUnique()
+                        .HasFilter("[PortfolioId] IS NOT NULL");
+
+                    b.HasDiscriminator().HasValue("User");
+                });
+
             modelBuilder.Entity("FundStack.Data.Models.Asset", b =>
                 {
+                    b.HasOne("FundStack.Data.Models.Portfolio", "Portfolio")
+                        .WithMany("Assets")
+                        .HasForeignKey("PortfolioId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("FundStack.Data.Models.Type", "Type")
                         .WithMany("Assets")
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Portfolio");
 
                     b.Navigation("Type");
                 });
@@ -387,6 +424,25 @@ namespace FundStack.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FundStack.Data.Models.User", b =>
+                {
+                    b.HasOne("FundStack.Data.Models.Portfolio", "Portfolio")
+                        .WithOne("User")
+                        .HasForeignKey("FundStack.Data.Models.User", "PortfolioId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Portfolio");
+                });
+
+            modelBuilder.Entity("FundStack.Data.Models.Portfolio", b =>
+                {
+                    b.Navigation("Assets");
+
+                    b.Navigation("User")
                         .IsRequired();
                 });
 

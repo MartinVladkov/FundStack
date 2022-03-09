@@ -56,12 +56,7 @@ namespace FundStack.Data.Models
 
         public Type Type { get; set; }
 
-        //public int PortfolioId { get; set; }
-
-        //public Portfolio Portfolio { get; set; }
-
-        //public string OwnerId { get; set; }
-
-        //public virtual ApplicationUser Owner { get; set; }
+        public int PortfolioId { get; set; }
+        public Portfolio Portfolio { get; set; }
     }
 }

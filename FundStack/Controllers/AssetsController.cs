@@ -70,7 +70,7 @@ namespace FundStack.Controllers
                 .Select(a => new AllAssetsViewModel
                 {
                     Id = a.Id,
-                    Name=a.Name,
+                    Name=a.Name.ToUpper(),
                     Type = a.Type.Name,
                     BuyPrice=a.BuyPrice,
                     BuyDate = a.BuyDate,

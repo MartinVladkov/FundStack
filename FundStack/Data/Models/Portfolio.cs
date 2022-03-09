@@ -1,12 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FundStack.Data.Models
 {
     public class Portfolio
     {
-        [Key]
-        [Required]
         public int Id { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
@@ -27,10 +26,9 @@ namespace FundStack.Data.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal ProfitLossPercent { get; set; }
 
-        //public IEnumerable<Asset> Assets { get; set; } = new List<Asset>();// ().Where(a => a.Type == AssetType.CryptoCurrency);
+        public string UserId { get; set; }
+        public User User { get; set; }
 
-        //public IEnumerable<Asset> Stocks { get; set; } = new List<Asset>().Where(a => a.Type == AssetType.Stock);
-
-        //prop User User{}
+        public IEnumerable<Asset> Assets { get; set; } = new List<Asset>();
     }
 }
