@@ -1,5 +1,6 @@
 ﻿using FundStack.Data;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
+//using Newtonsoft.Json.Linq;
 using RestSharp;
 using System.Text;
 using System.Text.Json;
@@ -28,62 +29,48 @@ namespace FundStack.Services.Assets
                     BuyPrice = a.BuyPrice,
                     BuyDate = a.BuyDate,
                     InvestedMoney = a.InvestedMoney,
-                    CurrentPrice = CurrPrice(a.Name),
+                    CurrentPrice = GetCurrentPrice(a.Name, a.Type.Name),
                     Description = a.Description
                 }).ToList();
 
             return assets;
         }
 
-        private static decimal CurrPrice(string assetName)
+        private static decimal GetCurrentPrice(string assetName, string assetType)
         {
-            var stream = GetCurrentPrice(assetName);
-            string? fileContents;
-            //using (StreamReader reader = new StreamReader(stream.Result))
-            //{
-            //    fileContents = reader.ReadToEnd();
-            //}
-            //byte[] byteArray = Encoding.UTF8.GetBytes(fileContents);
-            //MemoryStream memoryStream = new MemoryStream(byteArray);
-            var jsonObject = JsonConvert.DeserializeObject<Root>(stream.Result);
-            //AssetJsonModel jsonObject = JsonSerializer.Deserialize<AssetJsonModel>(stream.RE);
-            AssetJsonModel obj = jsonObject.GlobalQuote;
-            decimal currentPrice = decimal.Parse(obj.Price);
-            return currentPrice;
+            string connectionString;
+            decimal price = 0;
+
+            if(assetType == "Crypto")
+            {
+                connectionString = "https://coinranking1.p.rapidapi.com/coins?symbols=" + assetName;
+                var response = GetApiResponse(assetName, connectionString);
+                var doc = JsonDocument.Parse(response.Result);
+                var coinsJson = doc.RootElement.GetProperty("data").GetProperty("coins").EnumerateArray();
+                foreach (var coin in coinsJson)
+                {
+                    price = Decimal.Parse(coin.GetProperty("price").ToString());
+                    break;
+                }
+            }
+            else
+            {
+                connectionString = "https://twelve-data1.p.rapidapi.com/price?symbol="+ assetName + "&format=json&outputsize=30";
+                var response = GetApiResponse(assetName, connectionString);
+                var doc = JsonDocument.Parse(response.Result);
+                price = Decimal.Parse(doc.RootElement.GetProperty("price").ToString());
+            }
+
+            return price;
         }
 
-        private static async Task<string> GetCurrentPrice(string assetName)
+        private static async Task<string> GetApiResponse(string assetName, string connectionString)
         {
-            //decimal currentPrice;
             var client = new HttpClient();
-    //        var request = new HttpRequestMessage
-    //        {
-    //            Method = HttpMethod.Get,
-    //            RequestUri = new Uri("https://alpha-vantage.p.rapidapi.com/query?function=GLOBAL_QUOTE&symbol=" + assetName + "&datatype=json"),
-    //            Headers =
-    //{
-    //    { "x-rapidapi-host", "alpha-vantage.p.rapidapi.com" },
-    //    { "x-rapidapi-key", "35fe9782bemsh451fb4a3e35b09ap115869jsnaa66c6d112dd" },
-    //},
-    //        };
+   
             client.DefaultRequestHeaders.Add("x-rapidapi-key", "35fe9782bemsh451fb4a3e35b09ap115869jsnaa66c6d112dd");
-            string response = await client.GetStringAsync("https://alpha-vantage.p.rapidapi.com/query?function=GLOBAL_QUOTE&symbol=" + assetName + "&datatype=json");
-            //response.EnsureSuccessStatusCode();
-            //AssetJsonModel? jsonObject = response.Content.ReadFromJsonAsync<AssetJsonModel>().Result;
-            //var body = response.Content;
-            //AssetJsonModel? jsonObject = JsonSerializer.Deserialize<AssetJsonModel>(response);
-            //currentPrice = jsonObject.Price;
-
-            //var client = new RestClient("https://alpha-vantage.p.rapidapi.com/");
-            //var request = new RestRequest($"query?function=GLOBAL_QUOTE&symbol={assetName}&datatype=json", Method.Get);
-            //request.AddHeader("x-rapidapi-host", "alpha-vantage.p.rapidapi.com");
-            //request.AddHeader("x-rapidapi-key", "35fe9782bemsh451fb4a3e35b09ap115869jsnaa66c6d112dd");
-            //RestResponse response = client.GetAsync(request).Wait();
-            //var response = client.GetAsync<AssetJsonModel>(request);
-            //AssetJsonModel jsonObject = JsonSerializer.Deserialize<AssetJsonModel>(response);
-            //Console.WriteLine(response.Co);
-            //AssetJsonModel? jsonObject = JsonSerializer.Deserialize<AssetJsonModel>(response);
-            //decimal currentPrice = response.Price;
+            string response = await client.GetStringAsync(connectionString);
+            
             Console.WriteLine(response);
             return response;
         }
