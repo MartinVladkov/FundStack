@@ -13,56 +13,13 @@ namespace FundStack.Services.Assets
             this.data = data;
         }
 
-        public List<AllAssetServiceModel> All()
+        public List<AllAssetServiceModel> All(string userId)
         {
-            List<string> cryptoAssetNames = this.data
-                .Assets
-                .Where(a => a.Type.Name == "Crypto")
-                .GroupBy(a => a.Name)
-                .Select(y => y.Key)
-                .ToList();
-
-            List<string> stockAssetNames = this.data
-               .Assets
-               .Where(a => a.Type.Name == "Stock")
-               .GroupBy(a => a.Name)
-               .Select(y => y.Key)
-               .ToList(); 
-
-            if(cryptoAssetNames.Count > 0)
-            {
-                Dictionary<string, decimal> cryptoPrices = GetCurrentPrice(cryptoAssetNames, "Crypto");
-
-                foreach (var group in cryptoPrices)
-                {
-                    foreach (var asset in data.Assets.Where(a => a.Name == group.Key))
-                    {
-                        asset.CurrentPrice = group.Value;
-                    }
-                }
-
-                this.data.SaveChanges();
-            }
-
-            if(stockAssetNames.Count > 0)
-            {
-                Dictionary<string, decimal> stockPrices = GetCurrentPrice(stockAssetNames, "Stock");
-
-                foreach (var group in stockPrices)
-                {
-                    foreach (var asset in data.Assets.Where(a => a.Name == group.Key))
-                    {
-                        asset.CurrentPrice = group.Value;
-                    }
-                }
-
-                this.data.SaveChanges();
-            }
-
-            CalculateProfitLoss();
+            UpdateDatabase();
 
             var assets = this.data
                 .Assets
+                .Where(a => a.PortfolioId == userId)
                 .OrderByDescending(a => a.Id)
                 .Select(a => new AllAssetServiceModel
                 {
@@ -80,6 +37,55 @@ namespace FundStack.Services.Assets
                 }).ToList();
 
             return assets;
+        }
+
+        private void UpdateDatabase()
+        {
+            List<string> cryptoAssetNames = this.data
+                .Assets
+                .Where(a => a.Type.Name == "Crypto")
+                .GroupBy(a => a.Name)
+                .Select(y => y.Key)
+                .ToList();
+
+            List<string> stockAssetNames = this.data
+               .Assets
+               .Where(a => a.Type.Name == "Stock")
+               .GroupBy(a => a.Name)
+               .Select(y => y.Key)
+               .ToList();
+
+            if (cryptoAssetNames.Count > 0)
+            {
+                Dictionary<string, decimal> cryptoPrices = GetCurrentPrice(cryptoAssetNames, "Crypto");
+
+                foreach (var group in cryptoPrices)
+                {
+                    foreach (var asset in data.Assets.Where(a => a.Name == group.Key))
+                    {
+                        asset.CurrentPrice = group.Value;
+                    }
+                }
+
+                this.data.SaveChanges();
+            }
+
+            if (stockAssetNames.Count > 0)
+            {
+                Dictionary<string, decimal> stockPrices = GetCurrentPrice(stockAssetNames, "Stock");
+
+                foreach (var group in stockPrices)
+                {
+                    foreach (var asset in data.Assets.Where(a => a.Name == group.Key))
+                    {
+                        asset.CurrentPrice = group.Value;
+                    }
+                }
+
+                this.data.SaveChanges();
+            }
+
+            CalculateProfitLoss();
         }
 
         private static Dictionary<string, decimal> GetCurrentPrice(List<string> assetName, string assetType)
@@ -102,12 +108,18 @@ namespace FundStack.Services.Assets
                 var response = GetApiResponse(connectionString);
                 var doc = JsonDocument.Parse(response.Result);
                 var coinsJson = doc.RootElement.GetProperty("data").GetProperty("coins").EnumerateArray();
-
+                int i = 0;
                 foreach (var coin in coinsJson)
                 {
                     price = Decimal.Parse(coin.GetProperty("price").ToString());
                     assetSymbol = coin.GetProperty("symbol").ToString();
                     result.Add(assetSymbol, price);
+
+                    i++;
+                    if(i >= assetName.Count)
+                    {
+                        break;
+                    }
                 }
             }
             else

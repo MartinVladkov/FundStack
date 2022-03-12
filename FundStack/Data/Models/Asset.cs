@@ -13,8 +13,6 @@ namespace FundStack.Data.Models
         [StringLength(AssetNameMaxLength, MinimumLength = AssetNameMinLength)]
         public string Name { get; set; }
 
-        //public AssetType Type { get; set; }
-
         [Required]
         [Range(MinPrice, double.MaxValue)]
         [Column(TypeName = "decimal(18,10)")]
@@ -27,26 +25,21 @@ namespace FundStack.Data.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal InvestedMoney { get; set; }
       
-        //[Range(MinBuyAmount, double.MaxValue)]
-        //[Column(TypeName = "decimal(18,8)")]
+        [Column(TypeName = "decimal(18,8)")]
         public decimal? Amount { get; set; } //calculated given buy price and invested amount
 
-        //[Range(MinPrice, double.MaxValue)]
-        //[Column(TypeName = "decimal(18,10)")]
+        [Column(TypeName = "decimal(18,10)")]
         public decimal? CurrentPrice { get; set; }
 
-        //[Range(MinPrice, double.MaxValue)]
-        //[Column(TypeName = "decimal(18,10)")]
+        [Column(TypeName = "decimal(18,10)")]
         public decimal? SellPrice { get; set; }
 
         public DateTime? SellDate { get; set; }
 
-        //[Range(MinProfitLoss, double.MaxValue)]
-        //[Column(TypeName = "decimal(18,2)")]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal? ProfitLoss { get; set; }
 
-        //[Range(MinProfitLoss, double.MaxValue)]
-        //[Column(TypeName = "decimal(18,2)")]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal? ProfitLossPercent { get; set; }
 
         [MaxLength(350)]

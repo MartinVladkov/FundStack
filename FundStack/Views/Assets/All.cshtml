@@ -47,11 +47,15 @@ th{
                 <th scope="col">Descripton</th>
             </tr>
         </thead>
+        @{
+            int i = 0;
+        }
         @foreach (var asset in Model)
         {
+            i++;
             <tbody>
                 <tr>
-                    <th scope="row">@asset.Id</th>
+                    <th scope="row">@i</th>
                     <td>@asset.Name</td>
                     <td>@asset.Type</td>
                     <td>@asset.BuyPrice</td>

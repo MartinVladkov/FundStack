@@ -2,6 +2,7 @@
 using FundStack.Data.Models;
 using FundStack.Models.Assets;
 using FundStack.Services.Assets;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -18,6 +19,7 @@ namespace FundStack.Controllers
             this.data = data;
         }
 
+        [Authorize]
         public IActionResult AddAsset()
         {
             return View(new AddAssetFormModel
@@ -26,6 +28,7 @@ namespace FundStack.Controllers
             });
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult AddAsset(AddAssetFormModel input)
         {
@@ -69,9 +72,11 @@ namespace FundStack.Controllers
                     Name = t.Name,
                 }).ToList();
 
+        [Authorize]
         public IActionResult All()
         {
-            var assets = this.assets.All();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var assets = this.assets.All(userId);
             return View(assets);
         } 
 

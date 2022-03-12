@@ -2,6 +2,6 @@
 {
     public interface IAssetService
     {
-        List<AllAssetServiceModel> All();
+        List<AllAssetServiceModel> All(string userId);
     }
 }
