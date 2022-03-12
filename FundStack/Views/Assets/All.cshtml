@@ -19,7 +19,7 @@ tr{
 }
 
 td{
- max-width: 100px;
+ max-width:400px;
  overflow: auto;
  white-space: nowrap;
  text-align: center;
@@ -31,7 +31,7 @@ th{
 </style>
 
 <div calss="row">
-    <table class="table table-striped table-dark mt-5 mb-5">
+    <table class="table table-striped table-hover table-responsive-lg table-dark mt-5 mb-5">
         <thead>
             <tr>
                 <th scope="col">#</th>
@@ -39,8 +39,11 @@ th{
                 <th scope="col">Type</th>
                 <th scope="col">Buy Price</th>
                 <th scope="col">Buy Date</th>
-                <th scope="col">Current Price</th>
                 <th scope="col">Invested Money</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Current Price</th>
+                <th scope="col">Profit/Loss($)</th>
+                <th scope="col">Profit/Loss(%)</th>
                 <th scope="col">Descripton</th>
             </tr>
         </thead>
@@ -52,9 +55,12 @@ th{
                     <td>@asset.Name</td>
                     <td>@asset.Type</td>
                     <td>@asset.BuyPrice</td>
-                    <td>@asset.BuyDate</td>
-                    <td>@asset.CurrentPrice</td>
+                    <td>@asset.BuyDate.ToShortDateString()</td>
                     <td>@asset.InvestedMoney</td>
+                    <td>@asset.Amount</td>
+                    <td>@asset.CurrentPrice</td>
+                    <td>$@asset.ProfitLoss</td>
+                    <td>@asset.ProfitLossPercent%</td>
                     <td>@asset.Description</td>
                 </tr>
             </tbody>

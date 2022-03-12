@@ -1,4 +1,5 @@
 ﻿using FundStack.Models.Assets;
+using System.ComponentModel.DataAnnotations;
 
 namespace FundStack.Services.Assets
 {
@@ -10,6 +11,7 @@ namespace FundStack.Services.Assets
 
         public decimal BuyPrice { get; init; }
 
+        [DataType(DataType.Date)]
         public DateTime BuyDate { get; set; }
 
         public decimal InvestedMoney { get; init; }

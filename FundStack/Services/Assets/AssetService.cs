@@ -29,26 +29,37 @@ namespace FundStack.Services.Assets
                .Select(y => y.Key)
                .ToList(); 
 
-            Dictionary<string, decimal> cryptoPrices = GetCurrentPrice(cryptoAssetNames, "Crypto");
-            Dictionary<string, decimal> stockPrices = GetCurrentPrice(stockAssetNames, "Stock");
-
-            foreach (var group in cryptoPrices)
+            if(cryptoAssetNames.Count > 0)
             {
-                foreach (var asset in data.Assets.Where(a => a.Name == group.Key))
+                Dictionary<string, decimal> cryptoPrices = GetCurrentPrice(cryptoAssetNames, "Crypto");
+
+                foreach (var group in cryptoPrices)
                 {
-                    asset.CurrentPrice = group.Value;
+                    foreach (var asset in data.Assets.Where(a => a.Name == group.Key))
+                    {
+                        asset.CurrentPrice = group.Value;
+                    }
                 }
+
+                this.data.SaveChanges();
             }
 
-            foreach (var group in stockPrices)
+            if(stockAssetNames.Count > 0)
             {
-                foreach (var asset in data.Assets.Where(a => a.Name == group.Key))
+                Dictionary<string, decimal> stockPrices = GetCurrentPrice(stockAssetNames, "Stock");
+
+                foreach (var group in stockPrices)
                 {
-                    asset.CurrentPrice = group.Value;
+                    foreach (var asset in data.Assets.Where(a => a.Name == group.Key))
+                    {
+                        asset.CurrentPrice = group.Value;
+                    }
                 }
+
+                this.data.SaveChanges();
             }
 
-            this.data.SaveChanges();
+            CalculateProfitLoss();
 
             var assets = this.data
                 .Assets
@@ -59,9 +70,12 @@ namespace FundStack.Services.Assets
                     Name = a.Name.ToUpper(),
                     Type = a.Type.Name,
                     BuyPrice = a.BuyPrice,
-                    BuyDate = a.BuyDate,
+                    BuyDate = a.BuyDate.Date,
                     InvestedMoney = a.InvestedMoney,
+                    Amount = a.Amount,
                     CurrentPrice = a.CurrentPrice,
+                    ProfitLoss = a.ProfitLoss,
+                    ProfitLossPercent = a.ProfitLossPercent,
                     Description = a.Description
                 }).ToList();
 
@@ -123,5 +137,17 @@ namespace FundStack.Services.Assets
             return response;
         }
 
+        private void CalculateProfitLoss()
+        {
+            foreach (var asset in this.data.Assets)
+            {
+                var difference = asset.CurrentPrice - asset.BuyPrice;
+
+                asset.ProfitLossPercent = difference / asset.BuyPrice * 100;
+                asset.ProfitLoss = asset.InvestedMoney * asset.ProfitLossPercent / 100;
+                asset.Amount = asset.InvestedMoney / asset.BuyPrice;
+            }
+            this.data.SaveChanges();
+        }
     }
 }
