@@ -1,0 +1,69 @@
+﻿@model SellAssetServiceModel
+<style>
+#frame1 {
+  border-radius: 15px;
+  border: 4px solid #73AD21;
+  padding: 5%; 
+  width: 30%;
+  height: 0;
+  padding-bottom: 10%;
+}
+input, label {
+    display:block;
+}
+</style>
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-col-8 offset-lg-3 col-xl-6 mt-3 mb-5">
+        <h2 class="heading-margin text-left mb-3">Sell Asset</h2>
+        <form method="post">
+            <div class="form-group mb-3">
+                <label for="Name">Name</label>
+                <input type="text" value="@Model.Name" readonly></input>
+            </div>
+             <div class="form-group mb-3">
+                <label for="BuyPrice">Buy Price</label>
+                <input type="text" value="$@Model.BuyPrice" readonly></input>
+            </div>
+            <div class="form-group mb-3">
+                <label for="InvestedMoney">Invested Money</label>
+                <input type="text" value="$@Model.InvestedMoney" readonly></input>
+            </div>
+             <div class="form-group mb-3">
+                <label for="CurrentPrice">Current Price</label>
+                <input type="text" value="$@Model.CurrentPrice" readonly></input>
+            </div>
+            <div class="form-group mb-3">
+                <label for="ProfitLoss">Profit/Loss</label>
+                @if (Model.ProfitLoss > 0)
+                {
+                    <input type="text" style="color:green" value="+$@Model.ProfitLoss" readonly></input>
+                }
+                else if (Model.ProfitLoss < 0)
+                {
+                    <input type="text" style="color:red" value="$@Model.ProfitLoss" readonly></input>
+                }
+                else
+                {
+                    <input type="text" value="$@Model.ProfitLoss" readonly></input>
+                }  
+            </div>
+            <div class="form-group mb-3">
+                <label for="ProfitLossPercent">Profit/Loss %</label>
+                 @if (Model.ProfitLoss > 0)
+                {
+                    <input type="text" style="color:green" value="+@Model.ProfitLossPercent%" readonly></input>
+                }
+                else if (Model.ProfitLoss < 0)
+                {
+                    <input type="text" style="color:red" value="@Model.ProfitLossPercent%" readonly></input>
+                }
+                else
+                {
+                    <input type="text" value="@Model.ProfitLossPercent%" readonly></input>
+                }
+            </div>
+            <input class="btn btn-primary mt-3" type="submit" value="Sell"/>
+            <button type="button" class="btn btn-primary mt-3" onclick="location.href='@Url.Action("All", "Assets")'"/>Cancel</button>
+        </form>
+    </div>
+</div>

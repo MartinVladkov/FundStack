@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<AllAssetServiceModel>
+
 <style>
     table {
   border-collapse: separate;
@@ -45,17 +46,18 @@ th{
                 <th scope="col">Profit/Loss($)</th>
                 <th scope="col">Profit/Loss(%)</th>
                 <th scope="col">Descripton</th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
         @{
-            int i = 0;
+            int rowId = 0;
         }
         @foreach (var asset in Model)
         {
-            i++;
+            rowId++;
             <tbody>
                 <tr>
-                    <th scope="row">@i</th>
+                    <th scope="row">@rowId</th>
                     <td>@asset.Name</td>
                     <td>@asset.Type</td>
                     <td>@asset.BuyPrice</td>
@@ -66,8 +68,34 @@ th{
                     <td>$@asset.ProfitLoss</td>
                     <td>@asset.ProfitLossPercent%</td>
                     <td>@asset.Description</td>
+                    <td><button type="button" class="btn btn-primary" value="Open" 
+                        onclick="location.href='@Url.Action("Sell", "Assets")?id='+@asset.Id">Sell</button>
+                        <button id="deleteAsset" class="btn btn-danger" type="submit" >X</button></td>
                 </tr>
             </tbody>
         }
     </table>
 </div>
+
+@*@section Scripts{
+<script type="text/javascript">
+    var PlaceholderElement = $('#PlaceholderHere');
+    $(document).ready(function (){
+            $(".showbtn").click(function (event) {
+               console.log("clicked")
+        var url = $(this).data('url');
+        console.log(url)
+        var decodedUrl = decodeURIComponent(url);
+        console.log(decodedUrl)
+        $.get(decodedUrl).done(function (data) {
+            $("#sellAssetModal").modal('show');
+        });
+    });
+    });
+
+
+        $("#hideSellModal").click(function () {
+            $("#sellAssetModal").modal('hide');
+        });
+</script>
+ }*@

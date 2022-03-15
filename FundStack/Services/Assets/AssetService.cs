@@ -1,4 +1,5 @@
 ﻿using FundStack.Data;
+using FundStack.Data.Models;
 using System.Text;
 using System.Text.Json;
 
@@ -160,6 +161,47 @@ namespace FundStack.Services.Assets
                 asset.Amount = asset.InvestedMoney / asset.BuyPrice;
             }
             this.data.SaveChanges();
+        }
+
+        public SellAssetServiceModel Details(int assetId)
+        {
+            var asset = this.data
+                .Assets
+                .Where(a => a.Id == assetId)
+                .Select(a => new SellAssetServiceModel
+                {
+                    Id = a.Id,
+                    PortfolioId = a.PortfolioId, 
+                    Name = a.Name,
+                    BuyPrice = a.BuyPrice,
+                    InvestedMoney = a.InvestedMoney,
+                    CurrentPrice = a.CurrentPrice,
+                    ProfitLoss = a.ProfitLoss,
+                    ProfitLossPercent = a.ProfitLossPercent
+                })
+                .FirstOrDefault();
+
+            return asset;
+        }
+
+        public void Sell(SellAssetServiceModel asset)
+        {
+            //var soldAsset = new Asset
+            //{
+            //    Name = asset.Name,
+            //    TypeId = asset.TypeId,
+            //    BuyPrice = asset.BuyPrice,
+            //    InvestedMoney = asset.InvestedMoney,
+            //    Description = asset.Description,
+            //    BuyDate = DateTime.UtcNow,
+            //    PortfolioId = userId
+            //};
+
+        }
+
+        public void Delete()
+        {
+
         }
     }
 }

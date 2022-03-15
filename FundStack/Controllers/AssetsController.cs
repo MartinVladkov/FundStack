@@ -48,7 +48,7 @@ namespace FundStack.Controllers
 
             var asset = new Asset
             {
-                Name = input.Name,
+                Name = input.Name.ToUpper(),
                 TypeId = input.TypeId,
                 BuyPrice = input.BuyPrice,
                 InvestedMoney = input.InvestedMoney,
@@ -78,17 +78,31 @@ namespace FundStack.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var assets = this.assets.All(userId);
             return View(assets);
-        } 
-
-        public IActionResult SellAsset()
-        {
-            return View();
         }
 
-        [HttpPost]
-        public IActionResult SellAsset(SellAssetFormModel asset)
+        [Authorize]
+        [HttpGet]
+        public IActionResult Sell(int id)
         {
-            return View();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var asset = assets.Details(id);
+
+            if (!userId.Equals(asset.PortfolioId))
+            {
+                return Unauthorized();
+            }
+
+            //return Json(new { success = true, url = Url.Action("Sell", asset) });
+            return View(asset);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult Sell(SellAssetServiceModel asset)
+        {
+            Sell(asset);
+            return RedirectToAction(nameof(All));
         }
     }
 }
