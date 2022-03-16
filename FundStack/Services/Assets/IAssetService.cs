@@ -7,5 +7,7 @@
         SellAssetServiceModel Details(int assetId);
 
         void Sell(SellAssetServiceModel asset, string userId);
+
+        void Delete(int assetId);
     }
 }

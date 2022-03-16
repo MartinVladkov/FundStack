@@ -214,9 +214,15 @@ namespace FundStack.Services.Assets
             this.data.SaveChanges();
         }
 
-        public void Delete()
+        public void Delete(int id)
         {
+            var assetToDelete = this.data
+                .Assets
+                .Where(a => a.Id == id)
+                .FirstOrDefault();
 
+            this.data.Assets.Remove(assetToDelete);
+            this.data.SaveChanges();
         }
     }
 }

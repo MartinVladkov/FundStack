@@ -81,6 +81,14 @@ namespace FundStack.Controllers
         }
 
         [Authorize]
+        [HttpPost]
+        public IActionResult All(int id)
+        {
+            assets.Delete(id);
+            return RedirectToAction(nameof(All));
+        }
+
+        [Authorize]
         [HttpGet]
         public IActionResult Sell(int id)
         {
@@ -93,7 +101,6 @@ namespace FundStack.Controllers
                 return Unauthorized();
             }
 
-            //return Json(new { success = true, url = Url.Action("Sell", asset) });
             return View(asset);
         }
 
