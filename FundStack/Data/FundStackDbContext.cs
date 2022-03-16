@@ -8,6 +8,8 @@ namespace FundStack.Data
     {
         public DbSet<Asset> Assets { get; set; }
 
+        public DbSet<AssetHistory> AssetsHistory { get; set; }
+
         public DbSet<Models.Type> Types { get; set; }
 
         public DbSet<Portfolio> Portfolios { get; set; }

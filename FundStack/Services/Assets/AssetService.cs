@@ -184,19 +184,34 @@ namespace FundStack.Services.Assets
             return asset;
         }
 
-        public void Sell(SellAssetServiceModel asset)
+        public void Sell(SellAssetServiceModel asset, string userId)
         {
-            //var soldAsset = new Asset
-            //{
-            //    Name = asset.Name,
-            //    TypeId = asset.TypeId,
-            //    BuyPrice = asset.BuyPrice,
-            //    InvestedMoney = asset.InvestedMoney,
-            //    Description = asset.Description,
-            //    BuyDate = DateTime.UtcNow,
-            //    PortfolioId = userId
-            //};
+            // izbirame ot tablica assets tozi asset, chieto id suvpada s tova na podadeniq asset
+            // izbraniq asset mu se setva sell price i sell date i se premestva ot assets v nova tablica s prodadeni asseti/istoriq na portfolioto
+            var soldAsset = this.data
+                .Assets
+                .Where(a => a.Id == asset.Id)
+                .FirstOrDefault();
 
+            var assetHistory = new AssetHistory
+            {
+                Name = soldAsset.Name.ToUpper(),
+                TypeId = soldAsset.TypeId,
+                BuyPrice = soldAsset.BuyPrice,
+                BuyDate = soldAsset.BuyDate,
+                InvestedMoney = soldAsset.InvestedMoney,
+                Amount = (decimal)soldAsset.Amount,
+                SellPrice = (decimal)soldAsset.CurrentPrice,
+                SellDate = DateTime.UtcNow,
+                ProfitLoss = (decimal)soldAsset.ProfitLoss,
+                ProfitLossPercent = (decimal)soldAsset.ProfitLossPercent,
+                Description = soldAsset.Description,
+                PortfolioId = userId
+            };
+
+            this.data.Assets.Remove(soldAsset);
+            this.data.AssetsHistory.Add(assetHistory);
+            this.data.SaveChanges();
         }
 
         public void Delete()

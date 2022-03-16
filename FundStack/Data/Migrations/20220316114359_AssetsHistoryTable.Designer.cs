@@ -4,6 +4,7 @@ using FundStack.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FundStack.Data.Migrations
 {
     [DbContext(typeof(FundStackDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220316114359_AssetsHistoryTable")]
+    partial class AssetsHistoryTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,6 +99,9 @@ namespace FundStack.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("BuyPrice")
+                        .HasColumnType("decimal(18,10)");
+
+                    b.Property<decimal>("CurrentPrice")
                         .HasColumnType("decimal(18,10)");
 
                     b.Property<string>("Description")

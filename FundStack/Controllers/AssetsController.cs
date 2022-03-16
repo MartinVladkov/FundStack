@@ -101,7 +101,8 @@ namespace FundStack.Controllers
         [HttpPost]
         public IActionResult Sell(SellAssetServiceModel asset)
         {
-            Sell(asset);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            assets.Sell(asset, userId);
             return RedirectToAction(nameof(All));
         }
     }

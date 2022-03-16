@@ -5,5 +5,7 @@
         List<AllAssetServiceModel> All(string userId);
 
         SellAssetServiceModel Details(int assetId);
+
+        void Sell(SellAssetServiceModel asset, string userId);
     }
 }
