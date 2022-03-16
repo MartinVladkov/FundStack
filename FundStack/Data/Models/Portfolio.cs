@@ -14,9 +14,6 @@ namespace FundStack.Data.Models
         public decimal TotalValue { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
-        public decimal InitialInvestment { get; set; }
-
-        [Column(TypeName = "decimal(18,2)")]
         public decimal AvailableMoney { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]

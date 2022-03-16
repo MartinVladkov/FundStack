@@ -2,6 +2,7 @@ using FundStack.Data;
 using FundStack.Data.Models;
 using FundStack.Infrastructure;
 using FundStack.Services.Assets;
+using FundStack.Services.Portfolio;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,7 @@ builder.Services.AddControllersWithViews(options =>
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 builder.Services.AddTransient<IAssetService, AssetService>();
+builder.Services.AddTransient<IPortfolioService, PortfolioService>();
 
 var app = builder.Build();
 
