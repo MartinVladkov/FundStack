@@ -8,7 +8,7 @@
         public const double MinPrice = 0.0000000001;
         public const double MinBuyAmount = 0.0000000001;
         public const double MinProfitLoss = 0.001;
-
+        public const double MinMoneyAdd = 1;
 
 
     }

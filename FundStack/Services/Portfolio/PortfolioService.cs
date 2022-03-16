@@ -11,6 +11,18 @@ namespace FundStack.Services.Portfolio
             this.data = data;
         }
 
+        
+        public void AddMoney(string userId, decimal addedMoney)
+        {
+            var portfolio = this.data
+                .Portfolios
+                .Where(p => p.UserId == userId)
+                .FirstOrDefault();
+
+            portfolio.AvailableMoney = addedMoney;
+            this.data.SaveChanges();
+        }
+
         public ValuePortfolioServiceModel Details(string userId)
         {
             var portfolio = this.data
@@ -28,6 +40,11 @@ namespace FundStack.Services.Portfolio
                 .FirstOrDefault();
 
             return portfolio;
+        }
+
+        private void CalculatePortfolioValue()
+        {
+
         }
     }
 }

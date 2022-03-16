@@ -1,5 +1,4 @@
-﻿using FundStack.Data;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using static FundStack.Data.DataConstants;
 namespace FundStack.Models.Assets
 {
