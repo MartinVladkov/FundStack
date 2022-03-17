@@ -46,6 +46,17 @@ namespace FundStack.Controllers
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            var currPortfolio = this.data
+                .Portfolios
+                .Where(p => p.UserId == userId)
+                .FirstOrDefault();
+
+            //if (currPortfolio.AvailableMoney < input.InvestedMoney)
+            //{
+            //    ViewBag.Error = TempData["Cannot invest more money than available in portfolio"];
+            //    return View(); //TODO: Throw error that there are no available funds 
+            //}
+            
             var asset = new Asset
             {
                 Name = input.Name.ToUpper(),

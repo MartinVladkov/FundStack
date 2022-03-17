@@ -22,18 +22,18 @@ input, label {
     <div class="col-sm-12 offset-lg-2 col-lg-col-8 offset-lg-3 col-xl-6 mt-3 mb-5">
         <h2 class="heading-margin text-left mb-3">Sell Asset</h2>
         <span class="nowrap">$@Model.AvailableMoney + $@Model.InvestedMoney</span>
-        @if (Model.ProfitLoss > 0)
+        @if (@Model.ProfitLoss > 0)
         {
-            <span class="nowrap" type="text" style="color:green" value="+$@Model.ProfitLoss" readonly></span>
+            <span class="nowrap" type="text" style="color:green">+ $@Model.ProfitLoss</span>
         }
-        else if (Model.ProfitLoss < 0)
+        else if (@Model.ProfitLoss < 0)
         {
-            <span class="nowrap" type="text" style="color:red" value="$@Model.ProfitLoss" readonly></span>
+            <span class="nowrap" type="text" style="color:red">$@Model.ProfitLoss</span>
         }
         else
         {
             <span class="nowrap">+ $@Model.ProfitLoss</span>
         }
-        <span class="nowrap"> = @Model.TotalValue</span>
+        <span class="nowrap"> = $@Model.TotalValue</span>
     </div>
 </div>

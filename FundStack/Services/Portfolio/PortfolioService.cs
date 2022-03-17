@@ -1,4 +1,5 @@
 ﻿using FundStack.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace FundStack.Services.Portfolio
 {
@@ -25,6 +26,8 @@ namespace FundStack.Services.Portfolio
 
         public ValuePortfolioServiceModel Details(string userId)
         {
+            CalculatePortfolioValue(userId);
+
             var portfolio = this.data
                 .Portfolios
                 .Where(p => p.UserId == userId)
@@ -42,9 +45,25 @@ namespace FundStack.Services.Portfolio
             return portfolio;
         }
 
-        private void CalculatePortfolioValue()
+        private void CalculatePortfolioValue(string userId)
         {
+            var portfolio = this.data
+                .Portfolios
+                .Where(p => p.UserId == userId)
+                .Include(p => p.Assets)
+                .FirstOrDefault();
 
+            portfolio.InvestedMoney = portfolio.Assets
+                .ToList()
+                .Sum(a => a.InvestedMoney);
+
+            portfolio.ProfitLoss = (decimal)portfolio.Assets
+                .ToList()
+                .Sum(a => a.ProfitLoss);
+
+            portfolio.TotalValue = portfolio.AvailableMoney + portfolio.InvestedMoney + portfolio.ProfitLoss;
+
+            this.data.SaveChanges();
         }
     }
 }

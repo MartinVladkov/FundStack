@@ -23,7 +23,9 @@ namespace FundStack.Controllers
         public IActionResult Value()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var userPorfolio = portfolio.Details(userId);
+
             return View(userPorfolio);
         }
 
@@ -41,9 +43,12 @@ namespace FundStack.Controllers
             {
                 return View();
             }
+
             var money = addedMoney.AvailableMoney;
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             portfolio.AddMoney(userId, money);
+
             return RedirectToAction(nameof(Value));
         }
     }
