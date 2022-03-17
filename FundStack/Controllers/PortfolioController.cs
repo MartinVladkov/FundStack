@@ -51,5 +51,37 @@ namespace FundStack.Controllers
 
             return RedirectToAction(nameof(Value));
         }
+
+        [Authorize]
+        public IActionResult WithdrawMoney()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult WithdrawMoney(AddMoneyViewModel withdrawMoney)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var money = withdrawMoney.AvailableMoney;
+            var currPortfolio = this.data
+                .Portfolios
+                .Where(p => p.UserId == userId)
+                .FirstOrDefault();
+
+            if (currPortfolio.AvailableMoney < money)
+            {
+                ModelState.AddModelError("AvailableMoney", "Cannot withdraw more money than available in portfolio");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            portfolio.WithdrawMoney(userId, money);
+
+            return RedirectToAction(nameof(Value));
+        }
     }
 }

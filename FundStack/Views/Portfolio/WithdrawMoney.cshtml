@@ -1,0 +1,20 @@
+﻿@model AddMoneyViewModel
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-col-8 offset-lg-3 col-xl-6 mt-3 mb-5">
+        <h2 class="heading-margin text-left">Add Asset</h2>
+        <form method="post">
+            <label asp-for="AvailableMoney">Withdraw Money</label>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">$</span>
+                </div>
+                <input asp-for="AvailableMoney" class="form-control" placeholder="Withdraw money...">
+                <span asp-validation-for="AvailableMoney" class="text-danger"></span>
+            </div>
+
+            <input class="btn btn-primary mt-3" type="submit" value="Withdraw" />
+        </form>
+    </div>
+</div>

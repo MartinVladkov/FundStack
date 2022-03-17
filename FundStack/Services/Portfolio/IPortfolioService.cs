@@ -4,6 +4,8 @@
     {
         void AddMoney(string userId, decimal addedMoney);
 
+        void WithdrawMoney(string userId, decimal addedMoney);
+
         ValuePortfolioServiceModel Details(string userId);
     }
 }

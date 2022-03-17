@@ -1,5 +1,6 @@
 ﻿using FundStack.Data;
 using FundStack.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Text;
 using System.Text.Json;
 
@@ -186,12 +187,13 @@ namespace FundStack.Services.Assets
 
         public void Sell(SellAssetServiceModel asset, string userId)
         {
-            // izbirame ot tablica assets tozi asset, chieto id suvpada s tova na podadeniq asset
-            // izbraniq asset mu se setva sell price i sell date i se premestva ot assets v nova tablica s prodadeni asseti/istoriq na portfolioto
             var soldAsset = this.data
                 .Assets
                 .Where(a => a.Id == asset.Id)
+                .Include(a => a.Portfolio)
                 .FirstOrDefault();
+
+            soldAsset.Portfolio.AvailableMoney += soldAsset.InvestedMoney + (decimal)soldAsset.ProfitLoss;
 
             var assetHistory = new AssetHistory
             {

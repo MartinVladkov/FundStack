@@ -20,7 +20,7 @@ input, label {
 </style>
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-col-8 offset-lg-3 col-xl-6 mt-3 mb-5">
-        <h2 class="heading-margin text-left mb-3">Sell Asset</h2>
+        <h2 class="heading-margin text-left mb-3">Portfolio Value</h2>
         <span class="nowrap">$@Model.AvailableMoney + $@Model.InvestedMoney</span>
         @if (@Model.ProfitLoss > 0)
         {
@@ -35,5 +35,25 @@ input, label {
             <span class="nowrap">+ $@Model.ProfitLoss</span>
         }
         <span class="nowrap"> = $@Model.TotalValue</span>
+        <br>
+        <h4 class="text mt-3">Total Portfolio Profit/Loss (%):</h4>
+          @if (@Model.ProfitLossPercent > 0)
+        {
+            <span class="nowrap" type="text" style="color:green">+@Model.ProfitLossPercent%</span>
+        }
+        else if (@Model.ProfitLossPercent < 0)
+        {
+            <span class="nowrap" type="text" style="color:red">@Model.ProfitLossPercent%</span>
+        }
+        else
+        {
+            <span class="nowrap">@Model.ProfitLossPercent%</span>
+        }
+        <br>
+        <button type="button" class="btn btn-primary mt-3" value="Open" 
+                        onclick="location.href='@Url.Action("AddMoney", "Portfolio")'">Add Money</button> 
+
+         <button type="button" class="btn btn-primary mt-3" value="Open" 
+                        onclick="location.href='@Url.Action("WithdrawMoney", "Portfolio")'">Withdraw Money</button>
     </div>
 </div>

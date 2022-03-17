@@ -20,7 +20,18 @@ namespace FundStack.Services.Portfolio
                 .Where(p => p.UserId == userId)
                 .FirstOrDefault();
 
-            portfolio.AvailableMoney = addedMoney;
+            portfolio.AvailableMoney += addedMoney;
+            this.data.SaveChanges();
+        }
+
+        public void WithdrawMoney(string userId, decimal withdrawnMoney)
+        {
+            var portfolio = this.data
+                .Portfolios
+                .Where(p => p.UserId == userId)
+                .FirstOrDefault();
+
+            portfolio.AvailableMoney -= withdrawnMoney;
             this.data.SaveChanges();
         }
 
@@ -60,6 +71,8 @@ namespace FundStack.Services.Portfolio
             portfolio.ProfitLoss = (decimal)portfolio.Assets
                 .ToList()
                 .Sum(a => a.ProfitLoss);
+
+            portfolio.ProfitLossPercent = (portfolio.ProfitLoss / (portfolio.InvestedMoney + portfolio.AvailableMoney)) * 100;
 
             portfolio.TotalValue = portfolio.AvailableMoney + portfolio.InvestedMoney + portfolio.ProfitLoss;
 

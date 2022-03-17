@@ -37,13 +37,6 @@ namespace FundStack.Controllers
                 this.ModelState.AddModelError(nameof(input.TypeId), "Type is not valid");
             }
 
-            if (!ModelState.IsValid)
-            {
-                input.Types = this.GetAssetTypes();
-
-                return View(input);
-            }
-
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var currPortfolio = this.data
@@ -51,11 +44,17 @@ namespace FundStack.Controllers
                 .Where(p => p.UserId == userId)
                 .FirstOrDefault();
 
-            //if (currPortfolio.AvailableMoney < input.InvestedMoney)
-            //{
-            //    ViewBag.Error = TempData["Cannot invest more money than available in portfolio"];
-            //    return View(); //TODO: Throw error that there are no available funds 
-            //}
+            if (currPortfolio.AvailableMoney < input.InvestedMoney)
+            {
+                ModelState.AddModelError("InvestedMoney", "Not enough available money for this investment. You can add more from your portfolio page.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                input.Types = this.GetAssetTypes();
+
+                return View(input);
+            }
             
             var asset = new Asset
             {
@@ -67,6 +66,8 @@ namespace FundStack.Controllers
                 BuyDate = DateTime.UtcNow,
                 PortfolioId = userId
             };
+
+            currPortfolio.AvailableMoney -= input.InvestedMoney;
 
             this.data.Assets.Add(asset);
             this.data.SaveChanges();
