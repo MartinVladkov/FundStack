@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AllAssetServiceModel>
+﻿@model IEnumerable<AssetHistoryServiceModel>
 
 <style>
     table {
@@ -42,11 +42,11 @@ th{
                 <th scope="col">Buy Date</th>
                 <th scope="col">Invested Money</th>
                 <th scope="col">Amount</th>
-                <th scope="col">Current Price</th>
+                <th scope="col">Sell Price</th>
+                <th scope="col">Sell Date</th>
                 <th scope="col">Profit/Loss($)</th>
                 <th scope="col">Profit/Loss(%)</th>
                 <th scope="col">Descripton</th>
-                <th scope="col">Actions</th>
             </tr>
         </thead>
         @{
@@ -64,23 +64,13 @@ th{
                     <td>@asset.BuyDate.ToShortDateString()</td>
                     <td>@asset.InvestedMoney</td>
                     <td>@asset.Amount</td>
-                    <td>@asset.CurrentPrice</td>
+                    <td>@asset.SellPrice</td>
+                    <td>@asset.SellDate.ToShortDateString()</td>
                     <td>$@asset.ProfitLoss</td>
                     <td>@asset.ProfitLossPercent%</td>
                     <td>@asset.Description</td>
-                    <td>
-                        @using (Html.BeginForm("All", "Assets", new { id = @asset.Id}, FormMethod.Post)) {
-                        <button type="button" class="btn btn-primary" value="Open" 
-                        onclick="location.href='@Url.Action("Sell", "Assets")?id='+@asset.Id">Sell</button> 
-                        <button class="btn btn-danger" name="X-HTTP-Method-Override" type="submit"
-                        onclick="return confirm('Are you sure you want to delete asset: \nId: @rowId \nName: @asset.Name \nBuy Price: $@asset.BuyPrice \nInvested Money: $@asset.InvestedMoney')">
-                            X
-                        </button>
-                        }
-                    </td>
                 </tr>
             </tbody>
         }
     </table>
 </div>
-
