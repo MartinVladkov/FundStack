@@ -16,6 +16,7 @@
             <div class="form-group mt-2">
                 <label asp-for="TypeId">Type of asset</label>
                 <select asp-for="TypeId" class="form-control">
+                    <option hidden disabled="disabled" selected="selected">Please select asset type</option>
                     @foreach  (var type in Model.Types)
                     {
                         <option value="@type.Id">@type.Name</option>
@@ -57,11 +58,17 @@
 
 @section Scripts{
 <script>
+    var settings;
         $(document).ready(function() {
-            $("#Name").on("input", function(){
+            $("#TypeId").on("input", function(){
+                var select = document.getElementById('TypeId');
+                console.log(select)
+                var value = select.options[select.selectedIndex].text;
+                console.log(value)
+                if(value === "Crypto"){
         let name = document.querySelector('#Name').value
         console.log(name)
-        const settings = {
+        settings = {
         "async": true,
         "crossDomain": true,
         "url": "https://coinranking1.p.rapidapi.com/coins?symbols=" + name,
@@ -70,18 +77,30 @@
             "x-rapidapi-host": "coinranking1.p.rapidapi.com",
             "x-rapidapi-key": "35fe9782bemsh451fb4a3e35b09ap115869jsnaa66c6d112dd"
         }
-    };
-    console.log(settings.url)
-
+        }
         $.ajax(settings).done(function (response) {
-        console.log(response);
-        console.log(response.data.coins[0].price);
-        console.log(document.getElementsByName("#BuyPrice"));
         $("#BuyPrice").val(response.data.coins[0].price)
-        //document.getElementsByName("#BuyPrice").value = response.data.coins[0].price;
+            })
+                }
+                 else {
+                    let name = document.querySelector('#Name').value
+        console.log(name)
+        settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://twelve-data1.p.rapidapi.com/price?symbol=" + name + "&format=json&outputsize=30",
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "twelve-data1.p.rapidapi.com",
+            "x-rapidapi-key": "35fe9782bemsh451fb4a3e35b09ap115869jsnaa66c6d112dd"
+        }
+        }
+        $.ajax(settings).done(function (response) {
+        $("#BuyPrice").val(response.price)
     });
+    };
+
             });
         });
-        
 </script>
 }
