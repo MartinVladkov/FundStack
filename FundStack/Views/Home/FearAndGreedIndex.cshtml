@@ -15,6 +15,11 @@ h4 { margin-bottom: 30px; }
   margin-bottom: 0;
 }
 
+.card-text{
+  font-size: 19px;
+  font-weight: bold;
+
+}
 hr {
   margin-top: 40px;
   margin-bottom: 40px;
@@ -37,46 +42,43 @@ hr {
 }
 </style>
 <h4>Fear and Greed Index</h4>
-<div class="card mt-5" style="width: 18rem;">
+<h5 class="mt-3">Crypto Market</h5>
+<div class="card" style="width: 18rem;">
   <div class="" id="nowCard">
     <h5 class="card-title">Now:</h5>
-    <p class="card-text" id="valueNow"></p>
-        <p class="card-text" id="textNow"></p>
+    <div class="card-text" id="valueNow"></div>
+    <div class="card-text" id="textNow"></div>
   </div> 
   <ul class="list-group list-group-flush">
-    <li class="list-group-item cyan">Yesterday:
+    <li class="list-group-item">Yesterday:
     <div class="text-nowrap" id="valueYst"></div>
-        <div class="text-nowrap" id="textYst"></div>     
+    <div class="text-nowrap" id="textYst"></div>     
     </li>
-    <li class="list-group-item green">Last Week:
+    <li class="list-group-item">Last Week:
     <div class="text-nowrap" id="valueLstWeek"></div>
         <div class="text-nowrap" id="textLstWeek"></div>
     </li>
   </ul>
   </div>
 
-<div class="row">
-    <h5>Stock Market</h5>
-        <div class="col-xs-12 col-sm-6 col-lg-8">
-          <div class="text">Now:</div>
-           <div class="" id="shapeNowStock">
-            <div class="circle-txt" id="valueNowStock"></div>
-           </div>
-            <div id="textNowStock"></div>
-        </div>
-</div>
-<div class="row">
-        <div class="col-xs-6 col-lg-4">
-           <div class="">Yesterday: </div>
-           <div class="" id="textYstStock"></div>
-           <div class="" id="valueYstStock"></div>
-    <div class="">Last week:</div>
-        <div class="" id="textLstWeekStock"></div>
-    <div class="" id="valueLstWeekStock"></div>
-        </div>
-        </div>
-
-
+  <h5 class="mt-3">Stock Market</h5>
+<div class="card" style="width: 18rem;">
+  <div class="" id="nowCardStock">
+    <h5 class="card-title">Now:</h5>
+    <div class="card-text" id="valueNowStock"></div>
+    <div class="card-text" id="textNowStock"></div>
+  </div> 
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Yesterday:
+    <div class="text-nowrap" id="valueYstStock"></div>
+        <div class="text-nowrap" id="textYstStock"></div>     
+    </li>
+    <li class="list-group-item">Last Week:
+    <div class="text-nowrap" id="valueLstWeekStock"></div>
+        <div class="text-nowrap" id="textLstWeekStock"></div>
+    </li>
+  </ul>
+  </div>
 <script>
     fetch('https://api.alternative.me/fng/?limit=8')
   .then((response) => {
@@ -118,33 +120,26 @@ hr {
         return response.json();
       })
       .then((data) => {
-        document.getElementById("valueNowStock").textContent = data.fgi.now.value;
-          document.getElementById("valueYstStock").textContent = data.fgi.previousClose.value;
-          document.getElementById("valueLstWeekStock").textContent = data.fgi.oneMonthAgo.value;
-        
-          document.getElementById("textNowStock").textContent = data.fgi.now.valueText;
-          document.getElementById("textYstStock").textContent = data.fgi.previousClose.valueText;
-          document.getElementById("textLstWeekStock").textContntent = data.fgi.oneMonthAgo.valueText;
-        
-          if(document.getElementById("valueNowStock").textContent >= 0 &&
-              document.getElementById("valueNowStock").textContent < 25 ){
-            document.getElementById("textNowStock").style.color = "#F64623";
-            document.getElementById("shapeNowStock").className = "a-res-circle";
-          }
-          else if(document.getElementById("valueNowStock").textContent >= 25 &&
-                  document.getElementById("valueNowStock").textContent < 50 ){
-            document.getElementById("textNowStock").style.color = "#F68C23";
-            document.getElementById("shapeNowStock").className = "b-res-circle";
-          }
-          else if(document.getElementById("valueNowStock").textContent >= 50 &&
-                  document.getElementById("valueNowStock").textContent < 75 ){
-            document.getElementById("textNowStock").style.color = "#CCEA1E";
-            document.getElementById("shapeNowStock").className = "c-res-circle";
-          }
-          else if(document.getElementById("valueNowStock").textContent >= 75 &&
-                  document.getElementById("valueNowStock").textContent < 100 ){
-            document.getElementById("textNowStock").style.color = "#34DB35";
-            document.getElementById("shapeNowStock").className = "d-res-circle";
-          }
+    document.getElementById("valueNowStock").textContent = data.fgi.now.value;
+    document.getElementById("valueYstStock").textContent =  data.fgi.previousClose.value;
+    document.getElementById("valueLstWeekStock").textContent = data.fgi.oneWeekAgo.value;
+
+    document.getElementById("textNowStock").textContent = data.fgi.now.valueText;
+    document.getElementById("textYstStock").textContent = data.fgi.previousClose.valueText;
+    document.getElementById("textLstWeekStock").textContent = data.fgi.oneWeekAgo.valueText;
+
+    if (document.getElementById("valueNowStock").textContent >= 0 &&
+      document.getElementById("valueNowStock").textContent < 25) {
+      document.getElementById("nowCardStock").className = "card-body red";
+    } else if (document.getElementById("valueNowStock").textContent >= 25 &&
+      document.getElementById("valueNowStock").textContent < 50) {
+      document.getElementById("nowCardStock").className = "card-body orange";
+    } else if (document.getElementById("valueNowStock").textContent >= 50 &&
+      document.getElementById("valueNowStock").textContent < 75) {
+      document.getElementById("nowCardStock").className = "card-body cyan";
+    } else if (document.getElementById("valueNowStock").textContent >= 75 &&
+      document.getElementById("valueNowStock").textContent < 100) {
+      document.getElementById("nowCardStock").className = "card-body green";
+    }
         });
 </script>
