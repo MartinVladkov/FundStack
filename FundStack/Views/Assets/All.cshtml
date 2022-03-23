@@ -36,15 +36,39 @@ th{
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Type</th>
+                <th scope="col">
+                    <a asp-action="All" asp-route-sortOrder="@ViewData["NameSortParm"]">
+                        Name
+                    </a>
+                </th>
+                <th scope="col">
+                    <a asp-action="All" asp-route-sortOrder="@ViewData["TypeSortParm"]">
+                        Type
+                    </a>
+                </th>
                 <th scope="col">Buy Price</th>
-                <th scope="col">Buy Date</th>
-                <th scope="col">Invested Money</th>
+                <th scope="col">
+                    <a asp-action="All" asp-route-sortOrder="@ViewData["BuyDateSortParm"]">
+                        Buy Date
+                    </a>
+                </th>
+                <th scope="col">
+                    <a asp-action="All" asp-route-sortOrder="@ViewData["InvestedMoneySortParm"]">
+                    Invested Money
+                    </a>
+                </th>
                 <th scope="col">Amount</th>
                 <th scope="col">Current Price</th>
-                <th scope="col">Profit/Loss($)</th>
-                <th scope="col">Profit/Loss(%)</th>
+                <th scope="col">
+                    <a asp-action="All" asp-route-sortOrder="@ViewData["ProfitLossSortParm"]">
+                        Profit/Loss($)
+                    </a>
+                </th>
+                <th scope="col">
+                    <a asp-action="All" asp-route-sortOrder="@ViewData["ProfitLossPercentSortParm"]">
+                        Profit/Loss(%)
+                    </a>
+                </th>
                 <th scope="col">Descripton</th>
                 <th scope="col">Actions</th>
             </tr>
@@ -65,8 +89,34 @@ th{
                     <td>@asset.InvestedMoney</td>
                     <td>@asset.Amount</td>
                     <td>@asset.CurrentPrice</td>
-                    <td>$@asset.ProfitLoss</td>
-                    <td>@asset.ProfitLossPercent%</td>
+                    <td>
+                        @if(@asset.ProfitLoss > 0)
+                        {
+                            <div type="text" style="color:green">+$@asset.ProfitLoss</div>
+                        }
+                        else if(@asset.ProfitLoss < 0)
+                        {
+                            <div type="text" style="color:red">$@asset.ProfitLoss</div>
+                        }
+                        else
+                        {
+                            <div type="text">$@asset.ProfitLoss</div>
+                        }
+                    </td>
+                    <td>
+                           @if(@asset.ProfitLossPercent > 0)
+                        {
+                            <div type="text" style="color:green">+@asset.ProfitLossPercent%</div>
+                        }
+                        else if(@asset.ProfitLossPercent < 0)
+                        {
+                            <div type="text" style="color:red">@asset.ProfitLossPercent%</div>
+                        }
+                        else
+                        {
+                            <div type="text">@asset.ProfitLossPercent%</div>
+                        }
+                    </td>
                     <td>@asset.Description</td>
                     <td>
                         @using (Html.BeginForm("All", "Assets", new { id = @asset.Id}, FormMethod.Post)) {

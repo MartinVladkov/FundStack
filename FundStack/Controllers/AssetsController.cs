@@ -85,10 +85,57 @@ namespace FundStack.Controllers
                 }).ToList();
 
         [Authorize]
-        public IActionResult All()
+        public IActionResult All(string sortOrder)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var assets = this.assets.All(userId);
+
+            ViewData["NameSortParm"] = sortOrder == "Name" ? "name_desc" : "Name";
+            ViewData["TypeSortParm"] = sortOrder == "Type" ? "type_desc" : "Type";
+            ViewData["BuyDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewData["InvestedMoneySortParm"] = sortOrder == "InvestedMoney" ? "investedMoney_desc" : "InvestedMoney";
+            ViewData["ProfitLossSortParm"] = sortOrder == "ProfitLoss" ? "profitLoss_desc" : "ProfitLoss";
+            ViewData["ProfitLossPercentSortParm"] = sortOrder == "ProfitLossPercent" ? "profitLossPercent_desc" : "ProfitLossPercent";
+
+            switch (sortOrder)
+            {
+                case "Name":
+                    assets = assets.OrderBy(a => a.Name).ToList();
+                    break;
+                case "name_desc":
+                    assets = assets.OrderByDescending(a => a.Name).ToList();
+                    break;
+                case "Type":
+                    assets = assets.OrderBy(a => a.Type).ToList();
+                    break;
+                case "type_desc":
+                    assets = assets.OrderByDescending(a => a.Type).ToList();
+                    break;
+                case "InvestedMoney":
+                    assets = assets.OrderBy(a => a.InvestedMoney).ToList();
+                    break;
+                case "investedMoney_desc":
+                    assets = assets.OrderByDescending(a => a.InvestedMoney).ToList();
+                    break;
+                case "ProfitLoss":
+                    assets = assets.OrderBy(a => a.ProfitLoss).ToList();
+                    break;
+                case "profitLoss_desc":
+                    assets = assets.OrderByDescending(a => a.ProfitLoss).ToList();
+                    break;
+                case "ProfitLossPercent":
+                    assets = assets.OrderBy(a => a.ProfitLossPercent).ToList();
+                    break;
+                case "profitLossPercent_desc":
+                    assets = assets.OrderByDescending(a => a.ProfitLossPercent).ToList();
+                    break;
+                case "date_desc":
+                    assets = assets.OrderByDescending(a => a.BuyDate).ToList();
+                    break;
+                default:
+                    assets = assets.OrderBy(a => a.BuyDate).ToList();
+                    break;
+            }
             return View(assets);
         }
 
