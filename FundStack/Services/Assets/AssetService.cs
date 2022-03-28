@@ -15,14 +15,60 @@ namespace FundStack.Services.Assets
             this.data = data;
         }
 
-        public List<AllAssetServiceModel> All(string userId)
+        public List<AllAssetServiceModel> All(string userId, int excludeRecords, int pageSize, string sortOrder)
         {
             UpdateDatabase();
 
-            var assets = this.data
+            var orderedAssets = this.data
                 .Assets
                 .Where(a => a.PortfolioId == userId)
-                .OrderByDescending(a => a.Id)
+                .Include(a => a.Type)
+                .ToList();
+
+            switch (sortOrder)
+            {
+                case "Name":
+                    orderedAssets = orderedAssets.OrderBy(a => a.Name).ToList();
+                    break;
+                case "name_desc":
+                    orderedAssets = orderedAssets.OrderByDescending(a => a.Name).ToList();
+                    break;
+                case "Type":
+                    orderedAssets = orderedAssets.OrderBy(a => a.Type).ToList();
+                    break;
+                case "type_desc":
+                    orderedAssets = orderedAssets.OrderByDescending(a => a.Type).ToList();
+                    break;
+                case "InvestedMoney":
+                    orderedAssets = orderedAssets.OrderBy(a => a.InvestedMoney).ToList();
+                    break;
+                case "investedMoney_desc":
+                    orderedAssets = orderedAssets.OrderByDescending(a => a.InvestedMoney).ToList();
+                    break;
+                case "ProfitLoss":
+                    orderedAssets = orderedAssets.OrderBy(a => a.ProfitLoss).ToList();
+                    break;
+                case "profitLoss_desc":
+                    orderedAssets = orderedAssets.OrderByDescending(a => a.ProfitLoss).ToList();
+                    break;
+                case "ProfitLossPercent":
+                    orderedAssets = orderedAssets.OrderBy(a => a.ProfitLossPercent).ToList();
+                    break;
+                case "profitLossPercent_desc":
+                    orderedAssets = orderedAssets.OrderByDescending(a => a.ProfitLossPercent).ToList();
+                    break;
+                case "date_desc":
+                    orderedAssets = orderedAssets.OrderByDescending(a => a.BuyDate).ToList();
+                    break;
+                default:
+                    orderedAssets = orderedAssets.OrderBy(a => a.BuyDate).ToList();
+                    break;
+            }
+            
+
+            var assets = orderedAssets
+                .Skip(excludeRecords)
+                .Take(pageSize)
                 .Select(a => new AllAssetServiceModel
                 {
                     Id = a.Id,
@@ -36,8 +82,9 @@ namespace FundStack.Services.Assets
                     ProfitLoss = a.ProfitLoss,
                     ProfitLossPercent = a.ProfitLossPercent,
                     Description = a.Description
-                }).ToList();
-
+                })
+                .ToList();
+            
             return assets;
         }
 
@@ -157,9 +204,9 @@ namespace FundStack.Services.Assets
             {
                 var difference = asset.CurrentPrice - asset.BuyPrice;
 
-                asset.ProfitLossPercent = difference / asset.BuyPrice * 100;
-                asset.ProfitLoss = asset.InvestedMoney * asset.ProfitLossPercent / 100;
-                asset.Amount = asset.InvestedMoney / asset.BuyPrice;
+                asset.ProfitLossPercent = Math.Round((decimal)(difference / asset.BuyPrice * 100), 2);
+                asset.ProfitLoss = Math.Round((decimal)(asset.InvestedMoney * asset.ProfitLossPercent / 100), 2);
+                asset.Amount = Math.Round((decimal)(asset.InvestedMoney / asset.BuyPrice), 2);
             }
             this.data.SaveChanges();
         }
@@ -225,6 +272,13 @@ namespace FundStack.Services.Assets
 
             this.data.Assets.Remove(assetToDelete);
             this.data.SaveChanges();
+        }
+
+        public int GetCount(string userId)
+        {
+            return this.data.Assets
+                .Where(a => a.PortfolioId == userId)
+                .Count();
         }
     }
 }

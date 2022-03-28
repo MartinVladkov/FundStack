@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AllAssetServiceModel>
+﻿@model AllAssetsListViewModel
 
 <style>
     table {
@@ -76,7 +76,7 @@ th{
         @{
             int rowId = 0;
         }
-        @foreach (var asset in Model)
+        @foreach (var asset in Model.Assets)
         {
             rowId++;
             <tbody>
@@ -132,5 +132,39 @@ th{
             </tbody>
         }
     </table>
+    <nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item @if (!Model.HasPreviousPage) {<text> disabled </text>}">
+      <a class="page-link" asp-action="All" asp-route-pageNumber="@Model.PreviousPageNumber" 
+      asp-route-sortOrder="@ViewData["CurrentSort"]">Previous</a>
+    </li>
+            @for (int i = Model.PageNumber - 3; i < Model.PageNumber; i++)
+            {
+                if(i > 0)
+                {
+                    <li class="page-item"><a class="page-link" asp-action="All" asp-route-pageNumber="@i"
+                    asp-route-sortOrder="@ViewData["CurrentSort"]">@i</a></li>              
+                }
+            } 
+    <li class="page-item active">
+      <span class="page-link">
+        @Model.PageNumber
+        <span class="sr-only"></span>
+      </span>
+    </li>
+    @for (int i = Model.PageNumber + 1; i <= Model.PageNumber + 3; i++)
+            {
+                if(i <= Model.PagesCount)
+                {
+                    <li class="page-item"><a class="page-link" asp-action="All" asp-route-pageNumber="@i" 
+                        asp-route-sortOrder="@ViewData["CurrentSort"]">@i</a></li>              
+                }
+            }
+    <li class="page-item @if (!Model.HasNextPage) {<text> disabled </text>}">
+      <a class="page-link" asp-action="All" asp-route-pageNumber="@Model.NextPageNumber"
+      asp-route-sortOrder="@ViewData["CurrentSort"]">Next</a>
+    </li>
+  </ul>
+</nav>
 </div>
 
