@@ -3,7 +3,7 @@ using FundStack.Data.Models;
 using FundStack.Infrastructure;
 using FundStack.Services.Assets;
 using FundStack.Services.AssetsHistory;
-using FundStack.Services.Portfolio;
+using FundStack.Services.Portfolios;
 using FundStack.Services.PortfoliosHistory;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

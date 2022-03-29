@@ -1,4 +1,4 @@
-﻿namespace FundStack.Services.Portfolio
+﻿namespace FundStack.Services.Portfolios
 {
     public class ValuePortfolioServiceModel
     {

@@ -1,6 +1,5 @@
-﻿using FundStack.Data;
-using FundStack.Models.Portfolio;
-using FundStack.Services.Portfolio;
+﻿using FundStack.Models.Portfolio;
+using FundStack.Services.Portfolios;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -10,13 +9,10 @@ namespace FundStack.Controllers
     public class PortfolioController : Controller 
     {
         private readonly IPortfolioService portfolio;
-        private readonly FundStackDbContext data;
-        
 
-        public PortfolioController(IPortfolioService portfolio, FundStackDbContext data)
+        public PortfolioController(IPortfolioService portfolio)
         {
             this.portfolio = portfolio;
-            this.data = data;
         }
 
         [Authorize]
@@ -64,10 +60,7 @@ namespace FundStack.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var money = withdrawMoney.AvailableMoney;
-            var currPortfolio = this.data
-                .Portfolios
-                .Where(p => p.UserId == userId)
-                .FirstOrDefault();
+            var currPortfolio = this.portfolio.GetCurrentPortfolio(userId);
 
             if (currPortfolio.AvailableMoney < money)
             {

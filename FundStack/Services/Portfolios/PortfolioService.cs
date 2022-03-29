@@ -1,7 +1,8 @@
 ﻿using FundStack.Data;
+using FundStack.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace FundStack.Services.Portfolio
+namespace FundStack.Services.Portfolios
 {
     public class PortfolioService : IPortfolioService
     {
@@ -54,6 +55,16 @@ namespace FundStack.Services.Portfolio
                 .FirstOrDefault();
 
             return portfolio;
+        }
+
+        public Portfolio GetCurrentPortfolio(string userId)
+        {
+            var currPortfolio = this.data
+                .Portfolios
+                .Where(p => p.UserId == userId)
+                .FirstOrDefault();
+
+            return currPortfolio;
         }
 
         private void CalculatePortfolioValue(string userId)
