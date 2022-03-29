@@ -17,7 +17,7 @@ namespace FundStack.Services.PortfoliosHistory
             var portfolioHistory = this.data
                 .PortfoliosHistory
                 .Where(p => p.PortfolioId == userId)
-                .OrderByDescending(p => p.SnapshotDate)
+                .OrderBy(p => p.SnapshotDate)
                 .Select(p => new PortfolioHistoryServiceModel
                 {
                     PortfolioId = p.PortfolioId,

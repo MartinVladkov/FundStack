@@ -1,4 +1,5 @@
-﻿using FundStack.Services.PortfoliosHistory;
+﻿using FundStack.Models.PortfolioHistory;
+using FundStack.Services.PortfoliosHistory;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -19,7 +20,14 @@ namespace FundStack.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var portfolioView = portfolioHistory.TotalValue(userId);
+            var portfolioService = portfolioHistory.TotalValue(userId);
+
+            var portfolioView = new PortfolioHistoryViewModel();
+
+            foreach (var item in portfolioService)
+            {
+                portfolioView.History.Add(item.SnapshotDate.ToShortDateString(), item.PortfolioValue);
+            }
 
             return View(portfolioView);
         }
