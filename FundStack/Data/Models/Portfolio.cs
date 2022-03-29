@@ -30,5 +30,7 @@ namespace FundStack.Data.Models
         public IEnumerable<Asset> Assets { get; set; } = new List<Asset>();
 
         public IEnumerable<AssetHistory> AssetsHistory { get; set; } = new List<AssetHistory>();
+
+        public IEnumerable<PortfolioHistory> PortfolioHistory { get; set;} = new List<PortfolioHistory>();
     }
 }

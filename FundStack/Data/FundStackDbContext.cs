@@ -14,6 +14,8 @@ namespace FundStack.Data
 
         public DbSet<Portfolio> Portfolios { get; set; }
 
+        public DbSet<PortfolioHistory> PortfoliosHistory { get; set;}
+
         public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)

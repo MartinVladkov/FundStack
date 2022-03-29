@@ -33,7 +33,5 @@ namespace FundStack.Services.Assets
         public string PortfolioId { get; init; }
 
         public int AssetsCount { get; set; }
-
-
     }
 }

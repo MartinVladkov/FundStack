@@ -1,0 +1,11 @@
+﻿@model List<PortfolioHistoryServiceModel>
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-col-8 offset-lg-3 col-xl-6 mt-3 mb-5">
+        <h2 class="heading-margin text-left mb-3">Portfolio Value</h2>
+        @foreach(var value in Model)
+        {
+        <span class="nowrap">$@value.PortfolioValue</span>           
+        }
+     </div>   
+</div>
