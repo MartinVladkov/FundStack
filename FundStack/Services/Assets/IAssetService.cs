@@ -4,6 +4,8 @@
     {
         List<AllAssetServiceModel> All(string userId, int excludeRecords, int pageSize, string sortOrder);
 
+        void UpdateDatabase();
+
         int GetCount(string userId);
 
         SellAssetServiceModel Details(int assetId);

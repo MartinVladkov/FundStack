@@ -1,84 +1,79 @@
 ﻿@model PortfolioHistoryViewModel
 
-<html>
-    <head>
-        <script src="~/lib/Chart.js/chart.min.js"></script>
-    </head>
 
-    <body>
-
-    </body>
-</html>
 <div class="row">
-      <div class="container my-4">
+    <div class="container my-4">
 
-    <h5>Portfolio Value History</h5>
+        <h5>Portfolio Value History</h5>
 
-    <hr class="my-4">
+        <hr class="my-4">
 
-    <div>
-        <canvas id="lineChart">/canvas>
+        <div>
+            <canvas id="lineChart">/canvas>
+        </div>
+
     </div>
-
-  </div>
 </div>
 
+@section Scripts{
+<script src="~/lib/Chart.js/chart.min.js"></script>
 <script>
-  var portfolioDates = @Html.Raw(Json.Serialize(Model.History.Keys));
-  var portfolioValues = @Html.Raw(Json.Serialize(Model.History.Values));
+    var portfolioDates = @Html.Raw(Json.Serialize(Model.History.Keys));
+    var portfolioValues = @Html.Raw(Json.Serialize(Model.History.Values));
 
-  var ctxL = document.getElementById("lineChart").getContext('2d');
-  var myLineChart = new Chart(ctxL, {
-    type: 'line',
-    data: {
-      labels: portfolioDates,
-      datasets: [{
-          label: "Portfolio Total Value ($)",
-          data: portfolioValues,
-          backgroundColor: [
-            'rgba(140,196,164, 0.8)',
-          ],
-          borderColor: [
-            'rgba(108,156,132, 0.8)',
-          ],
-          borderWidth: 2
-        },
-      ]
-    },
-    options: {
-    responsive: true,
-    plugins: {
-      title: {
-        display: true,
-      },
-    },
-    interaction: {
-      intersect: false,
-    },
-    scales: {
-      x: {
-        display: true,
-        title: {
-          display: true
-        }
-      },
-      y: {
-          ticks: {
-                    // Include a dollar sign in the ticks
-                    callback: function(value, index, ticks) {
-                        return '$' + value;
-                    }
+    var ctxL = document.getElementById("lineChart").getContext('2d');
+    var myLineChart = new Chart(ctxL, {
+      type: 'line',
+      data: {
+        labels: portfolioDates,
+        datasets: [{
+            label: "Portfolio Total Value ($)",
+            data: portfolioValues,
+            backgroundColor: [
+              'rgba(140,196,164, 0.8)',
+            ],
+            borderColor: [
+              'rgba(108,156,132, 0.8)',
+            ],
+            borderWidth: 2
           },
-        display: true,
+        ]
+      },
+      options: {
+      responsive: true,
+      plugins: {
         title: {
           display: true,
-          text: 'Value'
         },
-        suggestedMin: Math.min(...portfolioValues) - 100,
-        suggestedMax: Math.max(...portfolioValues) + 200
+      },
+      interaction: {
+        intersect: false,
+      },
+      scales: {
+        x: {
+          display: true,
+          title: {
+            display: true
+          }
+        },
+        y: {
+            ticks: {
+                      // Include a dollar sign in the ticks
+                      callback: function(value, index, ticks) {
+                          return '$' + value;
+                      }
+            },
+          display: true,
+          title: {
+            display: true,
+            text: 'Value'
+          },
+          suggestedMin: Math.min(...portfolioValues) - 100,
+          suggestedMax: Math.max(...portfolioValues) + 200
+      }
+    },
     }
-  },
-  }
-  });
-  
+    });
+
 </script>
+}

@@ -76,5 +76,13 @@ namespace FundStack.Controllers
 
             return RedirectToAction(nameof(Value));
         }
+
+        [Authorize]
+        public IActionResult Statistics()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var portfolioStats = this.portfolio.GetPortfolioStats(userId);
+            return View(portfolioStats);
+        }
     }
 }

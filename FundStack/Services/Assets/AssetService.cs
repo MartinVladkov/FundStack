@@ -17,8 +17,6 @@ namespace FundStack.Services.Assets
 
         public List<AllAssetServiceModel> All(string userId, int excludeRecords, int pageSize, string sortOrder)
         {
-            UpdateDatabase();
-
             var orderedAssets = this.data
                 .Assets
                 .Where(a => a.PortfolioId == userId)
@@ -65,7 +63,6 @@ namespace FundStack.Services.Assets
                     break;
             }
             
-
             var assets = orderedAssets
                 .Skip(excludeRecords)
                 .Take(pageSize)
@@ -88,7 +85,7 @@ namespace FundStack.Services.Assets
             return assets;
         }
 
-        private void UpdateDatabase()
+        public void UpdateDatabase()
         {
             List<string> cryptoAssetNames = this.data
                 .Assets
@@ -99,7 +96,7 @@ namespace FundStack.Services.Assets
 
             List<string> stockAssetNames = this.data
                .Assets
-               .Where(a => a.Type.Name == "Stock")
+               .Where(a => a.Type.Name == "Stock" || a.Type.Name == "ETF")
                .GroupBy(a => a.Name)
                .Select(y => y.Key)
                .ToList();
@@ -179,7 +176,7 @@ namespace FundStack.Services.Assets
                     var response = GetApiResponse(connectionString);
                     var doc = JsonDocument.Parse(response.Result);
                     price = Decimal.Parse(doc.RootElement.GetProperty("price").ToString());
-                    assetSymbol = assetName.FirstOrDefault();
+                    assetSymbol = asset;
                     result.Add(assetSymbol, price);
                 }
             }

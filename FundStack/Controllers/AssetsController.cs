@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
+
 namespace FundStack.Controllers
 {
     public class AssetsController : Controller 
@@ -89,6 +90,27 @@ namespace FundStack.Controllers
         {
             const int pageSize = 3;
             int excludeRecords = (pageSize * pageNumber) - pageSize;
+            DateTime timeNow = DateTime.UtcNow;
+            var timeNowString = timeNow.ToString();
+           
+            var cookie = HttpContext.Request.Cookies["timer"];
+
+            if (cookie == null)
+            {
+                HttpContext.Response.Cookies.Append("timer", timeNowString);
+                
+                this.assets.UpdateDatabase();
+            }
+            else
+            {
+                if(DateTime.Parse(cookie.ToString()).AddMinutes(10) < DateTime.UtcNow)
+                {
+                    this.assets.UpdateDatabase();
+                    HttpContext.Response.Cookies.Append("timer", timeNowString);
+                }
+            }
+            
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             
             ViewData["CurrentSort"] = sortOrder;

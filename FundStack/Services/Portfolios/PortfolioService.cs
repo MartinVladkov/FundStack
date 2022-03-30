@@ -89,5 +89,31 @@ namespace FundStack.Services.Portfolios
 
             this.data.SaveChanges();
         }
+
+        public PortfolioStatisticServiceModel GetPortfolioStats(string userId)
+        {
+            var portfolioAssets = this.data
+            .Assets
+            .Where(a => a.PortfolioId == userId)
+            .Include(a => a.Type)
+            .ToList();
+
+            //Dictionary<string, Dictionary<string, decimal>> groupedAssets = portfolioAssets
+            //   .GroupBy(a => a.Type.Name)
+            //   .ToDictionary(x => x.Key, x => x.GroupBy(y => y.Name.ToUpper()).ToDictionary(y => y.Key, y => y.Sum(y => y.InvestedMoney)));
+
+            Dictionary<string, decimal> assetTypeValue = portfolioAssets
+                .GroupBy(a => a.Type.Name)
+                .ToDictionary(x => x.Key, x => x.Sum(x => x.InvestedMoney));
+
+           // Dictionary<string, decimal> assetTypeValue = portfolioAssets
+           //     .GroupBy(a => a.Type.Name)
+           //     .ToDictionary(x => x.GroupBy(y => y.Name) , x => x.Sum(x => x.InvestedMoney));
+
+            var portfolioStats = new PortfolioStatisticServiceModel();
+            portfolioStats.Statistics = assetTypeValue;
+            
+            return portfolioStats;
+        }
     }
 }

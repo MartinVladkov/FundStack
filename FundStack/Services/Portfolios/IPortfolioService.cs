@@ -11,5 +11,7 @@ namespace FundStack.Services.Portfolios
         Portfolio GetCurrentPortfolio(string userId);
 
         ValuePortfolioServiceModel Details(string userId);
+
+        PortfolioStatisticServiceModel GetPortfolioStats(string userId);
     }
 }
