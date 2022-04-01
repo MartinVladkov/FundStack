@@ -138,7 +138,9 @@ namespace FundStack.Controllers
         [HttpPost]
         public IActionResult All(int id)
         {
-            assets.Delete(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            assets.Delete(id, userId);
             return RedirectToAction(nameof(All));
         }
 

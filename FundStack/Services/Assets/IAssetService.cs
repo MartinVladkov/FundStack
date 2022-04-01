@@ -12,6 +12,6 @@
 
         void Sell(SellAssetServiceModel asset, string userId);
 
-        void Delete(int assetId);
+        void Delete(int assetId, string userId);
     }
 }

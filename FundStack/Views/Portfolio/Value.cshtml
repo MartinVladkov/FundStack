@@ -20,6 +20,8 @@ input, label {
 </style>
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-col-8 offset-lg-3 col-xl-6 mt-3 mb-5">
+        <div class="card ">
+              <div class="card-body">
         <h2 class="heading-margin text-left mb-3">Portfolio Value</h2>
         <span class="nowrap">$@Model.AvailableMoney + $@Model.InvestedMoney</span>
         @if (@Model.ProfitLoss > 0)
@@ -62,4 +64,6 @@ input, label {
          <button type="button" class="btn btn-primary mt-3" value="Open" 
                         onclick="location.href='@Url.Action("Statistics", "Portfolio")'">Portfolio Statistics</button>
     </div>
+</div>
+   </div>
 </div>

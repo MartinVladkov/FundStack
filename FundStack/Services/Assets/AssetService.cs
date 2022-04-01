@@ -260,13 +260,20 @@ namespace FundStack.Services.Assets
             this.data.SaveChanges();
         }
 
-        public void Delete(int id)
+        public void Delete(int id, string userId)
         {
             var assetToDelete = this.data
                 .Assets
+                .Where(a => a.PortfolioId == userId)
                 .Where(a => a.Id == id)
                 .FirstOrDefault();
 
+            var portfolio = this.data
+                .Portfolios
+                .Where(p => p.UserId == userId)
+                .FirstOrDefault();
+
+            portfolio.AvailableMoney += assetToDelete.InvestedMoney;
             this.data.Assets.Remove(assetToDelete);
             this.data.SaveChanges();
         }
