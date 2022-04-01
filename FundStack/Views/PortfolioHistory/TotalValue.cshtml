@@ -46,6 +46,12 @@
         title: {
           display: true,
         },
+        legend: {
+                display: true,
+                labels: {
+                    color: 'rgb(255, 255, 255)'
+                }
+            },
       },
       interaction: {
         intersect: false,
@@ -53,13 +59,15 @@
       scales: {
         x: {
           display: true,
+          ticks: {
+                color: 'rgb(255, 255, 255)'},
           title: {
             display: true
           }
         },
         y: {
             ticks: {
-                      // Include a dollar sign in the ticks
+                color: 'rgb(255, 255, 255)',
                       callback: function(value, index, ticks) {
                           return '$' + value;
                       }
@@ -67,7 +75,8 @@
           display: true,
           title: {
             display: true,
-            text: 'Value'
+            text: 'Value',
+            color: 'rgb(255, 255, 255)',
           },
           suggestedMin: Math.min(...portfolioValues) - 100,
           suggestedMax: Math.max(...portfolioValues) + 200

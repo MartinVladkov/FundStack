@@ -88,7 +88,7 @@ namespace FundStack.Controllers
         [Authorize]
         public IActionResult All(string sortOrder, int pageNumber = 1)
         {
-            const int pageSize = 3;
+            const int pageSize = 5;
             int excludeRecords = (pageSize * pageNumber) - pageSize;
             DateTime timeNow = DateTime.UtcNow;
             var timeNowString = timeNow.ToString();

@@ -1,50 +1,9 @@
 ﻿@model PortfolioStatisticServiceModel
 
-<div class="row">
-      <div class="container my-4">
-          <div class="card ">
-              <div class="card-body">
-    <h5>Portfolio Statistics</h5>
-      <hr class="my-4">
-    <div>
-        <h5>Invested money by asset type and value ($)</h5>
-      <canvas id="pieChart" style="max-width: 300px; max-height: 500px"></canvas>
+<h3 class="ml-3 mb-3">Portfolio Statistics</h3>
+    <div class="row">
+        @{await Html.RenderPartialAsync("_StatsPieChart", new StatsPieChartViewModel{Id = "Total", Statistics = Model.TotalStatistics});}
+        @{await Html.RenderPartialAsync("_StatsPieChart", new StatsPieChartViewModel{Id = "Crypto", Statistics = Model.CryptoStatistics});}
+        @{await Html.RenderPartialAsync("_StatsPieChart", new StatsPieChartViewModel{Id = "Stock", Statistics = Model.StockStatistics});}
+        @{await Html.RenderPartialAsync("_StatsPieChart", new StatsPieChartViewModel{Id = "ETF", Statistics = Model.EtfStatistics});}
     </div>
-  </div>
-</div>
-</div>
-</div>
-
-@section Scripts{
-<script src="~/lib/Chart.js/chart.min.js"></script>
-<script>
-    var assetTypes = @Html.Raw(Json.Serialize(Model.Statistics.Keys));
-    var assetValues = @Html.Raw(Json.Serialize(Model.Statistics.Values));
-
-    console.log(assetTypes)
-    console.log(assetValues)
-
-    var ctxP = document.getElementById("pieChart").getContext('2d');
-    var myPieChart = new Chart(ctxP, {
-      type: 'pie',
-      data: {
-        labels: assetTypes,
-        datasets: [{
-          data: assetValues,
-          backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
-          hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
-        }]
-      },
-      options: {
-        responsive: true,
-         plugins: {
-      datalabels: {
-        formatter: (value) => {
-          return value + '%';
-        }
-      }
-    }
-      }
-    });
-</script>
-}

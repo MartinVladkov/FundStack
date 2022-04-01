@@ -11,9 +11,27 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-           <partial name="_LoginPartial" />
+           <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Assets" asp-action="AddAsset">Add Asset</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Assets" asp-action="All">My Assets</a>
+    </li>
+     <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="AssetsHistory" asp-action="AllHistory">Assets History</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Portfolio" asp-action="Value">My Portfolio</a>
+    </li>
+    </ul>
+    <li class="nav-item">
+        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+    </li>
+    
+    <li class="nav-item">
+        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+        </form>
               </li>
             </ul>
-          </li>
-        </ul>
       </nav>

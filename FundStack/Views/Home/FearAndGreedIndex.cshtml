@@ -1,5 +1,5 @@
 ﻿<style>
-body { padding: 20px; }
+
 .container {
   padding-right: 15px;
   padding-left: 15px;
@@ -22,10 +22,6 @@ h4 { margin-bottom: 30px; }
   font-weight: bold;
 
 }
-hr {
-  margin-top: 40px;
-  margin-bottom: 40px;
-}
 
 .red {
   background-color: #CD6155 ;
@@ -43,9 +39,13 @@ hr {
   background-color: #2ECC71;
 }
 </style>
-<h4>Fear and Greed Index</h4>
-<h5 class="mt-3">Crypto Market</h5>
+
+<h4 class="ml-3">Fear and Greed Index</h4>
+<div class="container ml-0">
+    <div class="row">
+
 <div class="card" style="width: 18rem;">
+    <h5 class="mt-3 ml-3">Crypto Market</h5>
   <div class="" id="nowCard">
     <h5 class="card-title">Now:</h5>
     <div class="card-text" id="valueNow"></div>
@@ -63,8 +63,9 @@ hr {
   </ul>
   </div>
 
-  <h5 class="mt-3">Stock Market</h5>
-<div class="card" style="width: 18rem;">
+  
+<div class="card ml-3" style="width: 18rem;">
+    <h5 class="mt-3 ml-3">Stock Market</h5>
   <div class="" id="nowCardStock">
     <h5 class="card-title">Now:</h5>
     <div class="card-text" id="valueNowStock"></div>
@@ -81,6 +82,9 @@ hr {
     </li>
   </ul>
   </div>
+   </div>
+   </div>
+
 <script>
     fetch('https://api.alternative.me/fng/?limit=8')
   .then((response) => {

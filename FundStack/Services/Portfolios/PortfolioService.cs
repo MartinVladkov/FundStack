@@ -102,16 +102,27 @@ namespace FundStack.Services.Portfolios
             //   .GroupBy(a => a.Type.Name)
             //   .ToDictionary(x => x.Key, x => x.GroupBy(y => y.Name.ToUpper()).ToDictionary(y => y.Key, y => y.Sum(y => y.InvestedMoney)));
 
+            Dictionary<string, decimal> cryptoStats = portfolioAssets.Where(a => a.Type.Name == "Crypto")
+                .GroupBy(y => y.Name.ToUpper())
+                .ToDictionary(y => y.Key, y => y.Sum(y => y.InvestedMoney));
+
+            Dictionary<string, decimal> stockStats = portfolioAssets.Where(a => a.Type.Name == "Stock")
+                .GroupBy(y => y.Name.ToUpper())
+                .ToDictionary(y => y.Key, y => y.Sum(y => y.InvestedMoney));
+
+            Dictionary<string, decimal> etfStats = portfolioAssets.Where(a => a.Type.Name == "ETF")
+                .GroupBy(y => y.Name.ToUpper())
+                .ToDictionary(y => y.Key, y => y.Sum(y => y.InvestedMoney));
+
             Dictionary<string, decimal> assetTypeValue = portfolioAssets
                 .GroupBy(a => a.Type.Name)
                 .ToDictionary(x => x.Key, x => x.Sum(x => x.InvestedMoney));
 
-           // Dictionary<string, decimal> assetTypeValue = portfolioAssets
-           //     .GroupBy(a => a.Type.Name)
-           //     .ToDictionary(x => x.GroupBy(y => y.Name) , x => x.Sum(x => x.InvestedMoney));
-
             var portfolioStats = new PortfolioStatisticServiceModel();
-            portfolioStats.Statistics = assetTypeValue;
+            portfolioStats.CryptoStatistics = cryptoStats;
+            portfolioStats.StockStatistics = stockStats;
+            portfolioStats.EtfStatistics = etfStats;
+            portfolioStats.TotalStatistics = assetTypeValue;
             
             return portfolioStats;
         }

@@ -1,0 +1,47 @@
+﻿@model StatsPieChartViewModel
+
+<div class="card ml-5 mr-5">
+    <div class="card-body">
+        <h5>@Model.Id</h5>
+        <hr class="">
+        <div>
+            <h5>Investments by asset and value ($)</h5>
+            <canvas id="@Model.Id" style="max-width: 300px; max-height: 500px"></canvas>
+        </div>
+    </div>
+</div>
+
+     
+<script src="~/lib/Chart.js/chart.min.js"></script>
+<script>
+    var assetNames = @Html.Raw(Json.Serialize(Model.Statistics.Keys));
+    var assetValues = @Html.Raw(Json.Serialize(Model.Statistics.Values));
+
+    console.log(assetNames)
+    console.log(assetValues)
+
+    var ctxP = document.getElementById("@Model.Id").getContext('2d');
+    var myPieChart = new Chart(ctxP, {
+      type: 'pie',
+      scaleFontColor: "#FFFFFF",
+      data: {
+        labels: assetNames,
+        datasets: [{
+          data: assetValues,
+          backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
+          hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: true,
+                labels: {
+                    color: 'rgb(255, 255, 255)'
+                }
+            }
+        },
+    },
+    });
+</script>
