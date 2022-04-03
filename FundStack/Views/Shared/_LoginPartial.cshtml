@@ -3,7 +3,7 @@
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 
-<ul class="navbar-nav">
+
 @if (SignInManager.IsSignedIn(User))
 {
 <nav class="mt-2">
@@ -58,7 +58,9 @@
             <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
         </form>
         </li>
+        </ul>
 </nav>
+
 
 }
 else
@@ -74,4 +76,3 @@ else
       </ul>
 </nav>
 }
-</ul>

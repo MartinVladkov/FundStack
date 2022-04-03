@@ -32,10 +32,10 @@ namespace FundStack.Services.Assets
                     orderedAssets = orderedAssets.OrderByDescending(a => a.Name).ToList();
                     break;
                 case "Type":
-                    orderedAssets = orderedAssets.OrderBy(a => a.Type).ToList();
+                    orderedAssets = orderedAssets.OrderBy(a => a.Type.Name).ToList();
                     break;
                 case "type_desc":
-                    orderedAssets = orderedAssets.OrderByDescending(a => a.Type).ToList();
+                    orderedAssets = orderedAssets.OrderByDescending(a => a.Type.Name).ToList();
                     break;
                 case "InvestedMoney":
                     orderedAssets = orderedAssets.OrderBy(a => a.InvestedMoney).ToList();

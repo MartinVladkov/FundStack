@@ -18,46 +18,94 @@ input, label {
     display:block;
 }
 </style>
+
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-col-8 offset-lg-3 col-xl-6 mt-3 mb-5">
         <div class="card ">
-              <div class="card-body">
-        <h2 class="heading-margin text-left mb-3">Portfolio Value</h2>
-        <span class="nowrap">$@Model.AvailableMoney + $@Model.InvestedMoney</span>
-        @if (@Model.ProfitLoss > 0)
-        {
-            <span class="nowrap" type="text" style="color:green">+ $@Model.ProfitLoss</span>
-        }
-        else if (@Model.ProfitLoss < 0)
-        {
-            <span class="nowrap" type="text" style="color:red">$@Model.ProfitLoss</span>
-        }
-        else
-        {
-            <span class="nowrap">+ $@Model.ProfitLoss</span>
-        }
-        <span class="nowrap"> = $@Model.TotalValue</span>
-        <br>
-        <h4 class="text mt-3">Total Portfolio Profit/Loss (%):</h4>
-          @if (@Model.ProfitLossPercent > 0)
-        {
-            <span class="nowrap" type="text" style="color:green">+@Model.ProfitLossPercent%</span>
-        }
-        else if (@Model.ProfitLossPercent < 0)
-        {
-            <span class="nowrap" type="text" style="color:red">@Model.ProfitLossPercent%</span>
-        }
-        else
-        {
-            <span class="nowrap">@Model.ProfitLossPercent%</span>
-        }
-        <br>
-        <button type="button" class="btn btn-primary mt-3" value="Open" 
-                        onclick="location.href='@Url.Action("AddMoney", "Portfolio")'">Add Money</button> 
+            <div class="card-body">
+                <h2 class="heading-margin text-left mb-3 ml-4">Portfolio Value</h2>
+                <div class="row">
+                    <div class="card ml-4">
+                        <div class="card-body">
+                            <h5>Available Money</h5>
+                            <span>$@Model.AvailableMoney</span>
+                        </div>
+                    </div>
+                    <div class="card ml-1">
+                        <div class="card-body mt-3">
+                            <h5>+</h5>
+                        </div>
+                    </div>
+                    <div class="card ml-1">
+                        <div class="card-body">
+                            <h5>Invested Money</h5>
+                            <span>$@Model.InvestedMoney</span>
+                        </div>
+                    </div>
+                    <div class="card ml-1">
+                        <div class="card-body mt-3">
+                            <h5>+</h5>
+                        </div>
+                    </div>
+                    <div class="card ml-1">
+                        <div class="card-body">
+                            <h5>Profit/Loss</h5>
+                            @if (@Model.ProfitLoss > 0)
+                            {
+                                <span type="text" style="color:green">+ $@Model.ProfitLoss</span>
+                            }
+                            else if (@Model.ProfitLoss < 0)
+                            {
+                                <span type="text" style="color:red">$@Model.ProfitLoss</span>
+                            }
+                            else
+                            {
+                                <span class="nowrap">+ $@Model.ProfitLoss</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="card ml-1">
+                        <div class="card-body mt-3">
+                            <h5>=</h5>
+                        </div>
+                    </div>
+                    <div class="card ml-1">
+                        <div class="card-body">
+                            <h5>Total Value</h5>
+                            <span>$@Model.TotalValue</span>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="card ml-4">
+                        <div class="card-body">
+                            <h5>Total Portfolio Profit/Loss (%)</h5>
+                            @if (@Model.ProfitLossPercent > 0)
+                            {
+                                <span type="text" style="color:green">+@Model.ProfitLossPercent%</span>
+                            }
+                            else if (@Model.ProfitLossPercent < 0)
+                            {
+                                <span type="text" style="color:red">@Model.ProfitLossPercent%</span>
+                            }
+                            else
+                            {
+                                <span>@Model.ProfitLossPercent%</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary mt-3 ml-4" value="Open"
+                        onclick="location.href='@Url.Action("AddMoney", "Portfolio")'">
+                    Add Money
+                </button>
 
-         <button type="button" class="btn btn-primary mt-3" value="Open" 
-                        onclick="location.href='@Url.Action("WithdrawMoney", "Portfolio")'">Withdraw Money</button>
+                <button type="button" class="btn btn-primary mt-3" value="Open"
+                        onclick="location.href='@Url.Action("WithdrawMoney", "Portfolio")'">
+                    Withdraw Money
+                </button>
+            </div>
+        </div>
     </div>
-</div>
-   </div>
 </div>

@@ -98,10 +98,6 @@ namespace FundStack.Services.Portfolios
             .Include(a => a.Type)
             .ToList();
 
-            //Dictionary<string, Dictionary<string, decimal>> groupedAssets = portfolioAssets
-            //   .GroupBy(a => a.Type.Name)
-            //   .ToDictionary(x => x.Key, x => x.GroupBy(y => y.Name.ToUpper()).ToDictionary(y => y.Key, y => y.Sum(y => y.InvestedMoney)));
-
             Dictionary<string, decimal> cryptoStats = portfolioAssets.Where(a => a.Type.Name == "Crypto")
                 .GroupBy(y => y.Name.ToUpper())
                 .ToDictionary(y => y.Key, y => y.Sum(y => y.InvestedMoney));

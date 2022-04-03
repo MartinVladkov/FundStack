@@ -19,9 +19,14 @@ namespace FundStack.Controllers
         public IActionResult Value()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currPortfolio = this.portfolio.GetCurrentPortfolio(userId);
+           
+            if(currPortfolio.AvailableMoney == 0)
+            {
+                return View("NoFunds");
+            }
 
             var userPorfolio = portfolio.Details(userId);
-
             return View(userPorfolio);
         }
 
