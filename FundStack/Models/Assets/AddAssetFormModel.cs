@@ -11,7 +11,7 @@ namespace FundStack.Models.Assets
         [Range(MinPrice, double.MaxValue, ErrorMessage = "The buy price cannot be 0")]
         public decimal BuyPrice { get; init; }
 
-        [Range(1, double.MaxValue, ErrorMessage = "Invested money must be more than 1")]
+        [Range(1, double.MaxValue, ErrorMessage = "Invested money must be more than $1")]
         public decimal InvestedMoney { get; init; }
 
         [MaxLength(350, ErrorMessage = "The maximum length of the description is 350 characters")]

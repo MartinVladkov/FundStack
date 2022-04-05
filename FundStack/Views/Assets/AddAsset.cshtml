@@ -28,25 +28,29 @@
                 <span asp-validation-for="Types" class="text-danger"></span>
             </div>
 
-            <label asp-for="BuyPrice" class="mt-2">Buy Price</label>   
 
+            <div class="form-group mt-2">
+            <label asp-for="BuyPrice">Buy Price</label>   
             <div class="input-group">            
                 <div class="input-group-prepend">
                     <span class="input-group-text">$</span>
                 </div>
                 <input asp-for="BuyPrice" class="form-control" placeholder="$">
-                <span asp-validation-for="BuyPrice" class="text-danger"></span>
+            </div>
+            <span asp-validation-for="BuyPrice" class="text-danger"></span>
             </div>
 
-            <label asp-for="InvestedMoney" class="mt-2">Invested Money</label>
-
+            <div class="form-group mt-2">
+            <label asp-for="InvestedMoney">Invested Money</label>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">$</span>
                 </div>
                 <input asp-for="InvestedMoney" class="form-control" placeholder="$">
-                <span asp-validation-for="InvestedMoney" class="text-danger"></span>
             </div>
+             <span asp-validation-for="InvestedMoney" class="text-danger"></span>
+               </div>
+
             <div class="form-group mt-2">
                 <label asp-for="Description">Description</label>
                 <textarea asp-for="Description" class="form-control" rows="2" placeholder="Add note about the asset..."><</textarea>
@@ -61,6 +65,7 @@
             </div>
 
 @section Scripts{
+    <partial name="_ValidationScriptsPartial" />
 <script>
     var settings;
         $(document).ready(function() {

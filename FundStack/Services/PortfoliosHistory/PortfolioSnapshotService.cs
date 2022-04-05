@@ -15,9 +15,9 @@ namespace FundStack.Services.PortfoliosHistory
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            TimeSpan interval = TimeSpan.FromHours(24);
+            TimeSpan interval = TimeSpan.FromHours(14);
             //calculate time to run the first time & delay to set the timer
-            //DateTime.Today gives time of midnight 00.00
+            //DateTime.Today gives time of midnight 00.00 (UTC)
             var nextRunTime = DateTime.Today.AddDays(1).AddHours(1);
             var curTime = DateTime.Now;
             var firstInterval = nextRunTime.Subtract(curTime);
