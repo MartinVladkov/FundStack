@@ -40,12 +40,17 @@ namespace FundStack.Controllers
         [HttpPost]
         public IActionResult AddMoney(AddMoneyViewModel addedMoney)
         {
+            if (addedMoney.Money < 1)
+            {
+                ModelState.AddModelError("AvailableMoney", "The added money cannot be less than $1");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View();
             }
 
-            var money = addedMoney.AvailableMoney;
+            var money = addedMoney.Money;
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             portfolio.AddMoney(userId, money);
@@ -64,12 +69,17 @@ namespace FundStack.Controllers
         public IActionResult WithdrawMoney(AddMoneyViewModel withdrawMoney)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var money = withdrawMoney.AvailableMoney;
+            var money = withdrawMoney.Money;
             var currPortfolio = this.portfolio.GetCurrentPortfolio(userId);
 
             if (currPortfolio.AvailableMoney < money)
             {
                 ModelState.AddModelError("AvailableMoney", "Cannot withdraw more money than available in portfolio");
+            }
+
+            if (withdrawMoney.Money < 1)
+            {
+                ModelState.AddModelError("AvailableMoney", "Cannot withdraw less than $1");
             }
 
             if (!ModelState.IsValid)
@@ -86,6 +96,13 @@ namespace FundStack.Controllers
         public IActionResult Statistics()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currPortfolio = this.portfolio.GetCurrentPortfolio(userId);
+
+            if (currPortfolio.Assets.Count() == 0)
+            {
+                return View("NoAssets");
+            }
+
             var portfolioStats = this.portfolio.GetPortfolioStats(userId);
             return View(portfolioStats);
         }

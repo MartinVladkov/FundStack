@@ -9,6 +9,7 @@ namespace FundStack.Models.Portfolio
         public string? UserId { get; set; }
 
         [Range(MinMoneyAdd, double.MaxValue, ErrorMessage = "The added money cannot be less than $1")]
-        public decimal AvailableMoney { get; set; }
+        public decimal Money { get; set; }
     }
 }
+

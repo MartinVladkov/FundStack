@@ -10,8 +10,8 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">$</span>
                 </div>
-                <input asp-for="AvailableMoney" class="form-control" placeholder="Add money...">
-                <span asp-validation-for="AvailableMoney" class="text-danger"></span>
+                <input asp-for="Money" class="form-control" placeholder="Add money...">
+                <span asp-validation-for="Money" class="text-danger"></span>
             </div>
 
             <input class="btn btn-primary mt-3" type="submit" value="Add" />
@@ -20,3 +20,8 @@
 </div>
  </div>
 </div>
+
+@section Scripts
+{
+<partial name = "_ValidationScriptsPartial" />
+}
