@@ -1,5 +1,6 @@
 ﻿using FundStack.Data;
 using FundStack.Data.Models;
+using FundStack.Models.Assets;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 using System.Text.Json;
@@ -13,6 +14,30 @@ namespace FundStack.Services.Assets
         public AssetService(FundStackDbContext data)
         {
             this.data = data;
+        }
+
+        public void AddAsset(string userId, AddAssetFormModel input)
+        {
+            var asset = new Asset
+            {
+                Name = input.Name.ToUpper(),
+                TypeId = input.TypeId,
+                BuyPrice = input.BuyPrice,
+                InvestedMoney = input.InvestedMoney,
+                Description = input.Description,
+                BuyDate = DateTime.UtcNow,
+                PortfolioId = userId
+            };
+
+            var currPortfolio = this.data
+                .Portfolios
+                .Where(p => p.UserId == userId)
+                .FirstOrDefault();
+
+            currPortfolio.AvailableMoney -= input.InvestedMoney;
+
+            this.data.Assets.Add(asset);
+            this.data.SaveChanges();
         }
 
         public List<AllAssetServiceModel> All(string userId, int excludeRecords, int pageSize, string sortOrder)
@@ -278,11 +303,33 @@ namespace FundStack.Services.Assets
             this.data.SaveChanges();
         }
 
+        public IEnumerable<AssetTypeViewModel> GetAssetTypes()
+        {
+            var types = this.data
+                .Types
+                .Select(t => new AssetTypeViewModel
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                }).ToList();
+
+            return types;
+        }
+
         public int GetCount(string userId)
         {
             return this.data.Assets
                 .Where(a => a.PortfolioId == userId)
                 .Count();
+        }
+
+        public bool CheckNullAssetPrice(string userId)
+        {
+            if(this.data.Assets.Where(a => a.PortfolioId == userId).Any(a => a.CurrentPrice == null))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

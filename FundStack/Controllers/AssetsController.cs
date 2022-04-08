@@ -2,6 +2,7 @@
 using FundStack.Data.Models;
 using FundStack.Models.Assets;
 using FundStack.Services.Assets;
+using FundStack.Services.Portfolios;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -12,12 +13,12 @@ namespace FundStack.Controllers
     public class AssetsController : Controller 
     {
         private readonly IAssetService assets;
-        private readonly FundStackDbContext data;
+        private readonly IPortfolioService portfolio;
 
-        public AssetsController(IAssetService assets, FundStackDbContext data)
+        public AssetsController(IAssetService assets, IPortfolioService portfolio)
         {
-            this.assets = assets;  
-            this.data = data;
+            this.assets = assets;
+            this.portfolio = portfolio;
         }
 
         [Authorize]
@@ -25,7 +26,7 @@ namespace FundStack.Controllers
         {
             return View(new AddAssetFormModel
             {
-                Types = this.GetAssetTypes()
+                Types = assets.GetAssetTypes()
             });
         }
 
@@ -33,17 +34,14 @@ namespace FundStack.Controllers
         [HttpPost]
         public IActionResult AddAsset(AddAssetFormModel input)
         {
-            if (!this.data.Types.Any(t => t.Id == input.TypeId))
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currPortfolio = portfolio.GetCurrentPortfolio(userId);
+            var types = assets.GetAssetTypes();
+
+            if (!types.Any(t => t.Id == input.TypeId))
             {
                 this.ModelState.AddModelError(nameof(input.TypeId), "Type is not valid");
             }
-
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var currPortfolio = this.data
-                .Portfolios
-                .Where(p => p.UserId == userId)
-                .FirstOrDefault();
 
             if (currPortfolio.AvailableMoney < input.InvestedMoney)
             {
@@ -52,38 +50,15 @@ namespace FundStack.Controllers
 
             if (!ModelState.IsValid)
             {
-                input.Types = this.GetAssetTypes();
+                input.Types = assets.GetAssetTypes();
 
                 return View(input);
             }
-            
-            var asset = new Asset
-            {
-                Name = input.Name.ToUpper(),
-                TypeId = input.TypeId,
-                BuyPrice = input.BuyPrice,
-                InvestedMoney = input.InvestedMoney,
-                Description = input.Description,
-                BuyDate = DateTime.UtcNow,
-                PortfolioId = userId
-            };
 
-            currPortfolio.AvailableMoney -= input.InvestedMoney;
-
-            this.data.Assets.Add(asset);
-            this.data.SaveChanges();
+            assets.AddAsset(userId, input);
 
             return RedirectToAction(nameof(All));
         }
-
-        private IEnumerable<AssetTypeViewModel> GetAssetTypes() 
-            => data
-                .Types
-                .Select(t => new AssetTypeViewModel
-                {
-                    Id = t.Id,
-                    Name = t.Name,
-                }).ToList();
 
         [Authorize]
         public IActionResult All(string sortOrder, int pageNumber = 1)
@@ -95,6 +70,9 @@ namespace FundStack.Controllers
            
             var cookie = HttpContext.Request.Cookies["timer"];
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var priceCheck = assets.CheckNullAssetPrice(userId);
+
             if (cookie == null)
             {
                 HttpContext.Response.Cookies.Append("timer", timeNowString);
@@ -103,16 +81,13 @@ namespace FundStack.Controllers
             }
             else
             {
-                if(DateTime.Parse(cookie.ToString()).AddMinutes(10) < DateTime.UtcNow)
+                if(DateTime.Parse(cookie.ToString()).AddMinutes(10) < DateTime.UtcNow || priceCheck)
                 {
                     this.assets.UpdateDatabase();
                     HttpContext.Response.Cookies.Append("timer", timeNowString);
                 }
             }
-            
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = sortOrder == "Name" ? "name_desc" : "Name";
             ViewData["TypeSortParm"] = sortOrder == "Type" ? "type_desc" : "Type";
