@@ -71,7 +71,13 @@ namespace FundStack.Controllers
             var cookie = HttpContext.Request.Cookies["timer"];
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currPortfolio = portfolio.GetCurrentPortfolio(userId);
             var priceCheck = assets.CheckNullAssetPrice(userId);
+
+            if(currPortfolio.Assets.Count() == 0)
+            {
+                return View("NoAssets");
+            }
 
             if (cookie == null)
             {

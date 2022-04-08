@@ -13,9 +13,22 @@ namespace FundStack.Test.Controllers
     public class PortfolioControllerTest
     {
         //Helper Classes
+        private PortfolioController ArrangeTest(string userId)
+        {
+            var portfolioService = PortfolioServiceMock.Instance;
+            var portfolioController = new PortfolioController(portfolioService);
+
+            portfolioController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = MockUser(userId) }
+            };
+
+            return portfolioController;
+        } 
+
         private ClaimsPrincipal MockUser(string userId)
         {
-            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+          var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
           {
                    new Claim(ClaimTypes.Name, "example name"),
                    new Claim(ClaimTypes.NameIdentifier, userId),
@@ -45,18 +58,11 @@ namespace FundStack.Test.Controllers
 
         //Tests for Value()  ---------------------------------------------------------------------------------------
         [Fact]
-        public void ValueShouldReturnViewWhenAvailableMoneyIsMoreThanZero()
+        public void ValueShouldReturnViewWhenAvailableMoneyIsMoreThannonValid()
         {
             //Arrange
-            var data = DatabaseMock.Instance;
-            
-            var portfolioService = PortfolioServiceMock.Instance;
-            var portfolioController = new PortfolioController(portfolioService);
-
-            portfolioController.ControllerContext = new ControllerContext()
-            {
-                HttpContext = new DefaultHttpContext() { User = MockUser("nonZero") }
-            };
+            var userId = "valid";
+            var portfolioController = ArrangeTest(userId);
 
             //Act
             var result = portfolioController.Value();
@@ -70,15 +76,11 @@ namespace FundStack.Test.Controllers
         }
 
         [Fact]
-        public void ValueShouldReturnErrorViewWhenAvailableMoneyIsZero()
+        public void ValueShouldReturnErrorViewWhenAvailableMoneyIsnonValid()
         {
-            var portfolioService = PortfolioServiceMock.Instance;
-            var portfolioController = new PortfolioController(portfolioService);
-
-            portfolioController.ControllerContext = new ControllerContext()
-            {
-                HttpContext = new DefaultHttpContext() { User = MockUser("zero") }
-            };
+            //Arrange
+            var userId = "nonValid";
+            var portfolioController = ArrangeTest(userId);
 
             //Act
             var result = portfolioController.Value();
@@ -96,13 +98,9 @@ namespace FundStack.Test.Controllers
         public void AddMoneyShouldRedirectToValueOnCorrectInput(AddMoneyViewModel addedMoney)
         {
             //Arrange
-            var portfolioService = PortfolioServiceMock.Instance;
-            var portfolioController = new PortfolioController(portfolioService);
+            var userId = addedMoney.UserId;
+            var portfolioController = ArrangeTest(userId);
 
-            portfolioController.ControllerContext = new ControllerContext()
-            {
-                HttpContext = new DefaultHttpContext() { User = MockUser(addedMoney.UserId) }
-            };
             //Act
             var result = (RedirectToActionResult)portfolioController.AddMoney(addedMoney);
 
@@ -116,13 +114,8 @@ namespace FundStack.Test.Controllers
         public void AddMoneyShouldReturnViewOnIncorrectInput(AddMoneyViewModel addedMoney)
         {
             //Arrange
-            var portfolioService = PortfolioServiceMock.Instance;
-            var portfolioController = new PortfolioController(portfolioService);
-
-            portfolioController.ControllerContext = new ControllerContext()
-            {
-                HttpContext = new DefaultHttpContext() { User = MockUser(addedMoney.UserId) }
-            };
+            var userId = addedMoney.UserId;
+            var portfolioController = ArrangeTest(userId);
 
             //Act
             var result = portfolioController.AddMoney(addedMoney);
@@ -138,13 +131,9 @@ namespace FundStack.Test.Controllers
         public void WithdrawMoneyShouldRedirectToValueOnCorrectInput(AddMoneyViewModel withdrawMoney)
         {
             //Arrange
-            var portfolioService = PortfolioServiceMock.Instance;
-            var portfolioController = new PortfolioController(portfolioService);
+            var userId = "valid";
+            var portfolioController = ArrangeTest(userId);
 
-            portfolioController.ControllerContext = new ControllerContext()
-            {
-                HttpContext = new DefaultHttpContext() { User = MockUser("nonZero") }
-            };
             //Act
             var result = (RedirectToActionResult)portfolioController.WithdrawMoney(withdrawMoney);
 
@@ -158,13 +147,9 @@ namespace FundStack.Test.Controllers
         public void WithdrawMoneyShouldReturnViewOnIncorrectInput(AddMoneyViewModel withdrawMoney)
         {
             //Arrange
-            var portfolioService = PortfolioServiceMock.Instance;
-            var portfolioController = new PortfolioController(portfolioService);
+            var userId = "valid";
+            var portfolioController = ArrangeTest(userId);
 
-            portfolioController.ControllerContext = new ControllerContext()
-            {
-                HttpContext = new DefaultHttpContext() { User = MockUser("nonZero") }
-            };
             //Act
             var result = portfolioController.WithdrawMoney(withdrawMoney);
 
@@ -178,13 +163,9 @@ namespace FundStack.Test.Controllers
         public void WithdrawMoneyShouldReturnViewWhenNotEnoughAvailableMoney(AddMoneyViewModel withdrawMoney)
         {
             //Arrange
-            var portfolioService = PortfolioServiceMock.Instance;
-            var portfolioController = new PortfolioController(portfolioService);
+            var userId = "nonValid";
+            var portfolioController = ArrangeTest(userId);
 
-            portfolioController.ControllerContext = new ControllerContext()
-            {
-                HttpContext = new DefaultHttpContext() { User = MockUser("zero") }
-            };
             //Act
             var result = portfolioController.WithdrawMoney(withdrawMoney);
 
@@ -198,13 +179,9 @@ namespace FundStack.Test.Controllers
         public void StatisticsShouldReturnNoAssetsView()
         {
             //Arrange
-            var portfolioService = PortfolioServiceMock.Instance;
-            var portfolioController = new PortfolioController(portfolioService);
+            var userId = "nonValid";
+            var portfolioController = ArrangeTest(userId);
 
-            portfolioController.ControllerContext = new ControllerContext()
-            {
-                HttpContext = new DefaultHttpContext() { User = MockUser("zero") }
-            };
             //Act
             var result = portfolioController.Statistics();
 
@@ -219,20 +196,16 @@ namespace FundStack.Test.Controllers
         public void StatisticsShouldReturnViewWithStats()
         {
             //Arrange
-            var portfolioService = PortfolioServiceMock.Instance;
-            var portfolioController = new PortfolioController(portfolioService);
+            var userId = "valid";
+            var portfolioController = ArrangeTest(userId);
 
-            portfolioController.ControllerContext = new ControllerContext()
-            {
-                HttpContext = new DefaultHttpContext() { User = MockUser("nonZero") }
-            };
             //Act
             var result = portfolioController.Statistics();
 
             //Assert 
             Assert.NotNull(result);
             var viewResult = Assert.IsType<ViewResult>(result);
-
+ 
             var model = viewResult.Model;
             Assert.IsType<PortfolioStatisticServiceModel>(model);
         }

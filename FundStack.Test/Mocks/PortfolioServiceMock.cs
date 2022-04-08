@@ -15,10 +15,10 @@ namespace FundStack.Test.Mocks
 
                 //GetCurrentPortfolio
                 portfolioServiceMock
-                    .Setup(p => p.GetCurrentPortfolio("nonZero"))
+                    .Setup(p => p.GetCurrentPortfolio("valid"))
                     .Returns(new Portfolio
                     {
-                        UserId = "nonZero",
+                        UserId = "valid",
                         AvailableMoney = 200,
                         Assets = new[]
                         {
@@ -30,33 +30,33 @@ namespace FundStack.Test.Mocks
                     });
 
                 portfolioServiceMock
-                    .Setup(p => p.GetCurrentPortfolio("zero"))
+                    .Setup(p => p.GetCurrentPortfolio("nonValid"))
                     .Returns(new Portfolio
                     {
-                        UserId = "zero",
+                        UserId = "nonValid",
                         AvailableMoney = 0
                     });
 
                 //Details
                 portfolioServiceMock
-                    .Setup(p => p.Details("nonZero"))
+                    .Setup(p => p.Details("valid"))
                     .Returns(new ValuePortfolioServiceModel
                     {
-                        UserId = "nonZero",
+                        UserId = "valid",
                         AvailableMoney = 200,
                     });
 
                 portfolioServiceMock
-                   .Setup(p => p.Details("zero"))
+                   .Setup(p => p.Details("nonValid"))
                    .Returns(new ValuePortfolioServiceModel
                    {
-                       UserId = "zero",
+                       UserId = "nonValid",
                        AvailableMoney = 0
                    });
 
                 //GetPortfolioStats
                 portfolioServiceMock
-                 .Setup(p => p.GetPortfolioStats("nonZero"))
+                 .Setup(p => p.GetPortfolioStats("valid"))
                  .Returns(new PortfolioStatisticServiceModel
                  {
                      CryptoStatistics = new Dictionary<string, decimal>
