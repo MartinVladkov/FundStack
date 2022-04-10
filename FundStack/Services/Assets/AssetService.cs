@@ -183,7 +183,9 @@ namespace FundStack.Services.Assets
                 var response = GetApiResponse(connectionString);
                 var doc = JsonDocument.Parse(response.Result);
                 var coinsJson = doc.RootElement.GetProperty("data").GetProperty("coins").EnumerateArray();
+
                 int i = 0;
+
                 foreach (var coin in coinsJson)
                 {
                     price = Decimal.Parse(coin.GetProperty("price").ToString());
@@ -197,16 +199,24 @@ namespace FundStack.Services.Assets
                     }
                 }
             }
+
             else
             {
+                StringBuilder sb = new StringBuilder();
+
                 foreach (var asset in assetName)
                 {
-                    connectionString = "https://twelve-data1.p.rapidapi.com/price?symbol=" + asset + "&format=json&outputsize=30";
-                    var response = GetApiResponse(connectionString);
-                    var doc = JsonDocument.Parse(response.Result);
-                    price = Decimal.Parse(doc.RootElement.GetProperty("price").ToString());
-                    assetSymbol = asset;
-                    result.Add(assetSymbol, price);
+                    sb.Append($"{asset}%2C%20");
+                }
+
+                connectionString = "https://twelve-data1.p.rapidapi.com/price?symbol=" + sb + "&format=json&outputsize=30";
+                var response = GetApiResponse(connectionString);
+                var doc = JsonDocument.Parse(response.Result);
+
+                foreach (var asset in assetName)
+                {
+                    price = Decimal.Parse(doc.RootElement.GetProperty(asset).GetProperty("price").ToString());
+                    result.Add(asset, price);
                 }
             }
 
