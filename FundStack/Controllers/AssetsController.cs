@@ -83,13 +83,13 @@ namespace FundStack.Controllers
             {
                 HttpContext.Response.Cookies.Append("timer", timeNowString);
                 
-                this.assets.UpdateDatabase();
+                this.assets.UpdateDatabase(userId);
             }
             else
             {
                 if(DateTime.Parse(cookie.ToString()).AddMinutes(10) < DateTime.UtcNow || priceCheck)
                 {
-                    this.assets.UpdateDatabase();
+                    this.assets.UpdateDatabase(userId);
                     HttpContext.Response.Cookies.Append("timer", timeNowString);
                 }
             }

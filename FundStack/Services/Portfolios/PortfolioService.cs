@@ -62,6 +62,7 @@ namespace FundStack.Services.Portfolios
             var currPortfolio = this.data
                 .Portfolios
                 .Where(p => p.UserId == userId)
+                .Include(p => p.Assets)
                 .FirstOrDefault();
 
             return currPortfolio;

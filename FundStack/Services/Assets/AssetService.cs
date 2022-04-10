@@ -110,10 +110,11 @@ namespace FundStack.Services.Assets
             return assets;
         }
 
-        public void UpdateDatabase()
+        public void UpdateDatabase(string userId)
         {
             List<string> cryptoAssetNames = this.data
                 .Assets
+                .Where(a => a.PortfolioId == userId)
                 .Where(a => a.Type.Name == "Crypto")
                 .GroupBy(a => a.Name)
                 .Select(y => y.Key)
@@ -121,6 +122,7 @@ namespace FundStack.Services.Assets
 
             List<string> stockAssetNames = this.data
                .Assets
+               .Where(a => a.PortfolioId == userId)
                .Where(a => a.Type.Name == "Stock" || a.Type.Name == "ETF")
                .GroupBy(a => a.Name)
                .Select(y => y.Key)
@@ -132,7 +134,8 @@ namespace FundStack.Services.Assets
 
                 foreach (var group in cryptoPrices)
                 {
-                    foreach (var asset in data.Assets.Where(a => a.Name == group.Key))
+                    var currUserAssets = data.Assets.Where(a => a.PortfolioId == userId).Where(a => a.Name == group.Key);
+                    foreach (var asset in currUserAssets)
                     {
                         asset.CurrentPrice = group.Value;
                     }
@@ -147,7 +150,8 @@ namespace FundStack.Services.Assets
 
                 foreach (var group in stockPrices)
                 {
-                    foreach (var asset in data.Assets.Where(a => a.Name == group.Key))
+                    var currUserAssets = data.Assets.Where(a => a.PortfolioId == userId).Where(a => a.Name == group.Key);
+                    foreach (var asset in currUserAssets)
                     {
                         asset.CurrentPrice = group.Value;
                     }
@@ -156,7 +160,7 @@ namespace FundStack.Services.Assets
                 this.data.SaveChanges();
             }
 
-            CalculateProfitLoss();
+            CalculateProfitLoss(userId);
         }
 
         private static Dictionary<string, decimal> GetCurrentPrice(List<string> assetName, string assetType)
@@ -220,9 +224,11 @@ namespace FundStack.Services.Assets
             return response;
         }
 
-        private void CalculateProfitLoss()
+        private void CalculateProfitLoss(string userId)
         {
-            foreach (var asset in this.data.Assets)
+            var currUserAssets = this.data.Assets.Where(a => a.PortfolioId == userId).ToList();
+
+            foreach (var asset in currUserAssets)
             {
                 var difference = asset.CurrentPrice - asset.BuyPrice;
 

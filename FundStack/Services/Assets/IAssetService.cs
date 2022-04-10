@@ -8,7 +8,7 @@ namespace FundStack.Services.Assets
 
         List<AllAssetServiceModel> All(string userId, int excludeRecords, int pageSize, string sortOrder);
 
-        void UpdateDatabase();
+        void UpdateDatabase(string userId);
 
         int GetCount(string userId);
 
