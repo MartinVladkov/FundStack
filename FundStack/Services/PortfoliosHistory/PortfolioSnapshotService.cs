@@ -15,30 +15,14 @@ namespace FundStack.Services.PortfoliosHistory
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            TimeSpan interval = TimeSpan.FromHours(14);
-            //calculate time to run the first time & delay to set the timer
-            //DateTime.Today gives time of midnight 00.00 (UTC)
-            var nextRunTime = DateTime.Today.AddDays(1).AddHours(1);
-            var curTime = DateTime.Now;
-            var firstInterval = nextRunTime.Subtract(curTime);
+            // timer repeates call to RemoveScheduledAccounts every 24 hours.
+            _timer = new Timer(
+                SnapshotPortfolioValue,
+                null,
+                TimeSpan.Zero,
+                TimeSpan.FromHours(24)
+            );
 
-            Action action = () =>
-            {
-                var t1 = Task.Delay(firstInterval);
-                t1.Wait();
-                //remove inactive accounts at expected time
-                SnapshotPortfolioValue(null);
-                //now schedule it to be called every 24 hours for future
-                // timer repeates call to RemoveScheduledAccounts every 24 hours.
-                _timer = new Timer(
-                    SnapshotPortfolioValue,
-                    null,
-                    TimeSpan.Zero,
-                    interval
-                );
-            };
-
-            Task.Run(action);
             return Task.CompletedTask;
         }
 
@@ -53,7 +37,7 @@ namespace FundStack.Services.PortfoliosHistory
         {
             using (var scope = scopeFactory.CreateScope())
             {
-                var portfolioHistoryService = scope.ServiceProvider.GetRequiredService<PortfolioHistoryService>();
+                var portfolioHistoryService = scope.ServiceProvider.GetRequiredService<IPortfolioHistoryService>();
                 portfolioHistoryService.RecordPorfoltioValue();
             }
         }

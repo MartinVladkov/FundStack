@@ -31,17 +31,21 @@ namespace FundStack.Services.PortfoliosHistory
 
         public void RecordPorfoltioValue()
         {
-            foreach (var portfolio in data.Portfolios)
+            if(!this.data.PortfoliosHistory.Any(p => p.SnapshotDate == DateTime.UtcNow.Date))
             {
-                var portfolioSnapshot = new PortfolioHistory
+                foreach (var portfolio in data.Portfolios)
                 {
-                    PortfolioId = portfolio.UserId,
-                    PortfolioValue = portfolio.TotalValue,
-                    SnapshotDate = DateTime.UtcNow,
-                };
-               this.data.PortfoliosHistory.Add(portfolioSnapshot);
+                    var portfolioSnapshot = new PortfolioHistory
+                    {
+                        PortfolioId = portfolio.UserId,
+                        PortfolioValue = portfolio.TotalValue,
+                        SnapshotDate = DateTime.UtcNow.Date,
+                    };
+                    this.data.PortfoliosHistory.Add(portfolioSnapshot);
+                }
+                this.data.SaveChanges();
             }
-            this.data.SaveChanges();
+            
         }   
     }
 }

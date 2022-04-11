@@ -20,11 +20,16 @@ namespace FundStack.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var portfolioService = portfolioHistory.TotalValue(userId);
+            var currPortfolioHistory = portfolioHistory.TotalValue(userId);
+
+            if (currPortfolioHistory.Count == 0)
+            {
+                return View("NoFunds");
+            }
 
             var portfolioView = new PortfolioHistoryViewModel();
 
-            foreach (var item in portfolioService)
+            foreach (var item in currPortfolioHistory)
             {
                 portfolioView.History.Add(item.SnapshotDate.ToShortDateString(), item.PortfolioValue);
             }

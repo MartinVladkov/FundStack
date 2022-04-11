@@ -21,7 +21,7 @@ namespace FundStack.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currPortfolio = this.portfolio.GetCurrentPortfolio(userId);
            
-            if(currPortfolio.AvailableMoney == 0)
+            if(currPortfolio.TotalValue == 0)
             {
                 return View("NoFunds");
             }
