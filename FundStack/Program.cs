@@ -1,6 +1,7 @@
 using FundStack.Data;
 using FundStack.Data.Models;
 using FundStack.Infrastructure;
+using FundStack.Services.Admin;
 using FundStack.Services.Assets;
 using FundStack.Services.AssetsHistory;
 using FundStack.Services.Portfolios;
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<FundStackDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<FundStackDbContext>();
 builder.Services.AddControllersWithViews(options =>
 {
@@ -30,6 +32,8 @@ builder.Services.AddTransient<IAssetHistoryService, AssetHistoryService>();
 builder.Services.AddTransient<IPortfolioService, PortfolioService>();
 builder.Services.AddTransient<IPortfolioHistoryService, PortfolioHistoryService>();
 builder.Services.AddHostedService<PortfolioSnapshotService>();
+builder.Services.AddTransient<IAdminService, AdminService>();
+
 
 var app = builder.Build();
 
