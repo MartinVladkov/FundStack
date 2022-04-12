@@ -37,14 +37,13 @@ th{
 <div calss="row">
     <div class="card">
         <div class="card-body">
-             <form method="post"> 
-            <table class="table table-striped table-hover table-responsive-lg mt-5 mb-5">
+                <table class="table table-striped table-hover table-responsive-lg mt-5 mb-5">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">User Name</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Role</th>
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 @{
@@ -53,37 +52,20 @@ th{
                 @foreach (var user in Model)
                 {
                     rowId++;
-                    
                     <tbody>
                         <tr>
                             <th scope="row">@rowId</th>
                             <td>@user.UserName</td>
                             <td>@user.Email</td>
                             <td>
-                                @if (user.IsPremiumUser)
-                                {
-                                    <div class="form-check">
-                                        <input asp-for="@user.IsPremiumUser" class="form-check-input" value="true" checked>
-                                        <label asp-for="@user.IsPremiumUser">Premium User</label>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="form-check">
-                                        <input asp-for="@user.IsPremiumUser" class="form-check-input" value="true">
-                                        <label asp-for="@user.IsPremiumUser">Premium User</label>
-                                    </div>
-                                }
+                                <a class="btn btn-primary" asp-controller="Admin" asp-action="ManageRoles" asp-route-userId="@user.UserId">Manage Roles</a>
                             </td>
                         </tr>
-                   
                     </tbody>
                 }   
             </table>
-            <input class="btn btn-primary mt-3" type="submit" value="Save Roles"/>
-            </form>
         </div>
-
     </div>
-    
 </div>
+
+

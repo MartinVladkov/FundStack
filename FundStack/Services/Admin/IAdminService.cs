@@ -1,9 +1,15 @@
-﻿namespace FundStack.Services.Admin
+﻿using FundStack.Models.Users;
+
+namespace FundStack.Services.Admin
 {
     public interface IAdminService
     {
         List<AllUsersServiceModel> GetAllUsers();
 
-        void ChangeRole(List<AllUsersServiceModel> users);
+        Task ChangeRole(List<ManageRolesViewModel> userRoles, string userId);
+
+        Task<List<ManageRolesViewModel>> GetUserRoles(string userId);
+
+        string GetUserName (string userId);
     }
 }

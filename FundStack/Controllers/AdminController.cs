@@ -1,4 +1,5 @@
 ﻿using FundStack.Data.Models;
+using FundStack.Models.Users;
 using FundStack.Services.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -24,11 +25,24 @@ namespace FundStack.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public IActionResult AllUsers(List<AllUsersServiceModel> users)
+        public async Task<IActionResult> ManageRoles(string userId)
         {
-            admin.ChangeRole(users);
-            return RedirectToAction("FearAndGreedIndex", "Home", new { area = "" });
+            var userRoles = await admin.GetUserRoles(userId);
+            var userName = admin.GetUserName(userId);
+
+            ViewBag.UserName = userName;
+            ViewBag.UserId = userId;
+            
+            return View(userRoles);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> ManageRoles(List<ManageRolesViewModel> userRoles, string userId)
+        {
+            await admin.ChangeRole(userRoles, userId);
+
+            return RedirectToAction(nameof(AllUsers));
         }
     }
 }
