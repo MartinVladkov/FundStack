@@ -24,7 +24,7 @@ namespace FundStack.Controllers
             return View(assets);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin, PremiumUser")]
         [HttpPost]
         public IActionResult Export()
         {

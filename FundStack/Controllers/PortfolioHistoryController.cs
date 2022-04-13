@@ -15,7 +15,7 @@ namespace FundStack.Controllers
             this.portfolioHistory = portfolioHistory;
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin, PremiumUser")]
         public IActionResult TotalValue()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

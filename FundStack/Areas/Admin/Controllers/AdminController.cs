@@ -1,4 +1,5 @@
-﻿using FundStack.Data.Models;
+﻿using FundStack.Areas.Admin.Controllers;
+using FundStack.Data.Models;
 using FundStack.Models.Users;
 using FundStack.Services.Admin;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FundStack.Controllers
 {
-    public class AdminController : Controller
+    public class AdminController : BaseController
     {
         private readonly IAdminService admin;
 

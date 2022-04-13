@@ -92,7 +92,7 @@ namespace FundStack.Controllers
             return RedirectToAction(nameof(Value));
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin, PremiumUser")]
         public IActionResult Statistics()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
