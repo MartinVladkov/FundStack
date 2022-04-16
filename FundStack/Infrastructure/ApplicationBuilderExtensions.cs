@@ -31,9 +31,6 @@ namespace FundStack.Infrastructure
                 new Data.Models.Type { Name = "Crypto" },
                 new Data.Models.Type { Name = "Stock"},
                 new Data.Models.Type { Name = "ETF"},
-                new Data.Models.Type { Name = "Commodity"},
-                new Data.Models.Type { Name = "Currency"},
-                new Data.Models.Type { Name = "Index"},
             });
 
             data.SaveChanges();

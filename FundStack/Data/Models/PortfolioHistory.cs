@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FundStack.Data.Models
 {
@@ -13,6 +12,7 @@ namespace FundStack.Data.Models
         public DateTime SnapshotDate { get; set; }
 
         public string PortfolioId { get; set; }
+
         public Portfolio Portfolio { get; set; }
     }
 }

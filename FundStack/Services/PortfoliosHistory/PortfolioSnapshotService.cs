@@ -15,7 +15,7 @@ namespace FundStack.Services.PortfoliosHistory
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            // timer repeates call to RemoveScheduledAccounts every 24 hours.
+            // timer repeates call to SnapshotPortfolioValue every 24 hours.
             _timer = new Timer(
                 SnapshotPortfolioValue,
                 null,

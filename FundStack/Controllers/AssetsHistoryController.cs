@@ -1,6 +1,4 @@
-﻿using ClosedXML.Excel;
-using FundStack.Services.Assets;
-using FundStack.Services.AssetsHistory;
+﻿using FundStack.Services.AssetsHistory;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;

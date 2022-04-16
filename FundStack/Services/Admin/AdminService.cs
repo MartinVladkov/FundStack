@@ -2,7 +2,6 @@
 using FundStack.Data.Models;
 using FundStack.Models.Users;
 using Microsoft.AspNetCore.Identity;
-using System.Linq;
 
 namespace FundStack.Services.Admin
 {

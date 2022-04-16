@@ -1,12 +1,9 @@
-﻿using FundStack.Data;
-using FundStack.Data.Models;
-using FundStack.Models.Assets;
+﻿using FundStack.Models.Assets;
 using FundStack.Services.Assets;
 using FundStack.Services.Portfolios;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-
 
 namespace FundStack.Controllers
 {

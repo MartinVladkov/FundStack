@@ -45,7 +45,6 @@ namespace FundStack.Services.PortfoliosHistory
                 }
                 this.data.SaveChanges();
             }
-            
         }   
     }
 }

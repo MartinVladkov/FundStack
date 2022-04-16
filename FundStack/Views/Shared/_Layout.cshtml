@@ -35,7 +35,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-1">
     <!-- Brand Logo -->
-    <a href="@Url.Action("FearAndGreedIndex", "Home")" class="brand-link">
+    <a href="@Url.Action("Index", "Home")" class="brand-link">
       <img src="~/fundstack_logo.png" alt="Fundstack Logo" class="img-fluid" style="opacity: .8">
      
     </a>
@@ -44,6 +44,9 @@
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+            <i class="nav-icon fas fa-solid fa-user mt-3 ml-1"></i>
+            </div>
         <div class="info">
           <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity?.Name</a>
         </div>
@@ -66,10 +69,10 @@
             <h1 class="m-0">@ViewData["Title"]</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+@*            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#" value="">Home</a></li>
               <li class="breadcrumb-item active">PAge</li>
-            </ol>
+            </ol>*@
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->

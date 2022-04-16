@@ -1,9 +1,7 @@
 ﻿using FundStack.Areas.Admin.Controllers;
-using FundStack.Data.Models;
 using FundStack.Models.Users;
 using FundStack.Services.Admin;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FundStack.Controllers
