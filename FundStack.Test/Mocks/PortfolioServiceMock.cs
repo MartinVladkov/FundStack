@@ -20,6 +20,7 @@ namespace FundStack.Test.Mocks
                     {
                         UserId = "valid",
                         AvailableMoney = 200,
+                        TotalValue = 250,
                         Assets = new[]
                         {
                             new Asset
@@ -44,6 +45,7 @@ namespace FundStack.Test.Mocks
                     {
                         UserId = "valid",
                         AvailableMoney = 200,
+                        TotalValue = 250
                     });
 
                 portfolioServiceMock

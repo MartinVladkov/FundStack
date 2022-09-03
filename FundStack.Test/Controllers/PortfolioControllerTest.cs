@@ -58,7 +58,7 @@ namespace FundStack.Test.Controllers
 
         //Tests for Value()  ---------------------------------------------------------------------------------------
         [Fact]
-        public void ValueShouldReturnViewWhenAvailableMoneyIsMoreThannonValid()
+        public void ValueShouldReturnViewWhenAvailableMoneyIsValid()
         {
             //Arrange
             var userId = "valid";

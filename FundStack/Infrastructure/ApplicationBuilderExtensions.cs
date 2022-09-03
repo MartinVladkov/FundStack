@@ -11,7 +11,7 @@ namespace FundStack.Infrastructure
             using var scopedServices = app.ApplicationServices.CreateScope();
 
             var data = scopedServices.ServiceProvider.GetService<FundStackDbContext>();
-
+            //TODO: check if database exists
             data.Database.Migrate();
 
             SeedTypes(data);
@@ -25,7 +25,7 @@ namespace FundStack.Infrastructure
             {
                 return;
             }
-
+            //TODO: check if database exists
             data.Types.AddRange(new[]
             {
                 new Data.Models.Type { Name = "Crypto" },
